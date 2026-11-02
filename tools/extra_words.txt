@@ -1,0 +1,1 @@
+# Extra woorden om op te zoeken (één per regel). Na een wijziging zoekt GitHub ze automatisch op.

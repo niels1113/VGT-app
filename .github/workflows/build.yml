@@ -1,0 +1,29 @@
+name: gebaren-ophalen
+on:
+  push:
+    paths: ["index.html", "tools/build.py", "tools/extra_words.txt", ".github/workflows/build.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: gebaren
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install mediapipe==0.10.14 opencv-python-headless
+      - run: |
+          mkdir -p models
+          curl -sSL -o models/hand.task https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task
+          curl -sSL -o models/pose.task https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task
+      - run: python3 tools/build.py
+      - run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add data/
+          git commit -m "Gebaren bijgewerkt" || exit 0
+          git pull --rebase
+          git push

@@ -270,7 +270,7 @@ function load(){
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 /* ---------- eigen video's (IndexedDB, alleen op dit toestel) ---------- */
-let VDB = null; const VIDS = {}, REMOTE = new Set(), FR = {};
+let VDB = null; const VIDS = {}, REMOTE = new Set(), FR = {}, BUILT = new Set();
 const DEFAULT_URLS = {"hallo": "https://vlaamsegebarentaal.be/signbank/dictionary/protected_media/glossvideo/HA/HALLO-A-16601.mp4"};
 function openVDB(){ return new Promise((res, rej) => { const r = indexedDB.open("handig-vgt-videos", 2);
   r.onupgradeneeded = () => { const d = r.result; if(!d.objectStoreNames.contains("v")) d.createObjectStore("v"); if(!d.objectStoreNames.contains("f")) d.createObjectStore("f"); };
@@ -290,15 +290,25 @@ async function loadVids(){
       q.onsuccess = () => { const c = q.result; if(c){ FR[c.key] = c.value; c.continue(); } else res(); };
       q.onerror = () => res(); });
   }catch(e){ VDB = null; }
+  try{
+    const r = await fetch("data/signs.json", {cache:"no-cache"});
+    if(r.ok){
+      const data = await r.json();
+      Object.entries(data).forEach(([w, d]) => {
+        if(!VIDS[w]){ setLive(w, d.url); BUILT.add(w); }
+        if(BUILT.has(w) && d.frames && d.frames.length) FR[w] = {frames: d.frames, dur: d.dur};
+      });
+    }
+  }catch(e){}
   Object.entries(DEFAULT_URLS).forEach(([w,u]) => { if(!VIDS[w]) setLive(w, u); });
-  if(!L) render();
+  if(!L && !P) render();
 }
 function idbPut(store, key, val){ return new Promise((res, rej) => { if(!VDB) return rej(new Error("Opslag niet beschikbaar")); const q = VDB.transaction(store,"readwrite").objectStore(store).put(val, key); q.onsuccess = () => res(); q.onerror = () => rej(q.error); }); }
 function idbDel(store, key){ return new Promise(res => { if(!VDB) return res(); const q = VDB.transaction(store,"readwrite").objectStore(store).delete(key); q.onsuccess = q.onerror = () => res(); }); }
 async function putVid(word, fileOrUrl){
   const val = typeof fileOrUrl === "string" ? fileOrUrl : new Blob([fileOrUrl], {type: fileOrUrl.type || "video/mp4"});
   await idbPut("v", word, val);
-  setLive(word, val); delete FR[word]; await idbDel("f", word);
+  setLive(word, val); BUILT.delete(word); delete FR[word]; await idbDel("f", word);
 }
 async function delVid(word){
   await idbDel("v", word); await idbDel("f", word); delete FR[word];
