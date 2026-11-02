@@ -798,7 +798,7 @@ function reviewView(){
 function videosView(){
   const total = Object.keys(WORDS).length, have = Object.keys(WORDS).filter(w => VIDS[w]).length;
   let html = `<div class="pad"><h1 class="t">Video's</h1>
-   <p class="muted info" style="margin-top:0">Laad gebarenvideo's in de app. Dan zie je het gebaar meteen in de les en krijg je oefeningen als “Wat betekent dit gebaar?”. De video's blijven alleen op dit toestel. <b>${have}/${total}</b> woorden hebben een video.</p>
+   <p class="muted info" style="margin-top:0">Laad gebarenvideo's in de app. Dan zie je het gebaar meteen in de les en krijg je oefeningen als “Wat betekent dit gebaar?”. <b>${have}/${total}</b> woorden hebben een video${BUILT.size ? `, waarvan ${BUILT.size} automatisch uit het VGT-woordenboek` : ""}. Ontbreekt er een, of wil je een andere variant? Voeg dan zelf een video toe; die blijft alleen op dit toestel.</p>
    <div class="card info"><b style="color:var(--ink)">Snelst: plak het videoadres</b><br>
     Zoek het woord op in het <a href="${DICT}" target="_blank" rel="noopener">VGT-woordenboek</a>. Op een computer: klik met de rechtermuisknop op de video en kies <i>Videoadres kopiëren</i>. Op Android: houd je vinger op de video en kies <i>Link kopiëren</i>. Tik hieronder naast het woord op <b>🔗</b> en plak het adres.</div>
    <div class="card info"><b style="color:var(--ink)">Of: videobestanden</b><br>
