@@ -4,6 +4,7 @@
   "goedemorgen",
   "goedenavond",
   "tot ziens",
+  "dank je",
   "sorry",
   "ja",
   "nee",
@@ -57,30 +58,34 @@
   "buiten",
   "wachten",
   "mooi",
-  "muziek"
+  "muziek",
+  "naar huis",
+  "ik hou van jou"
  ],
  "niet_gevonden": [
   {
-   "woord": "dank je",
-   "kandidaten": []
-  },
-  {
    "woord": "alsjeblieft",
-   "kandidaten": []
+   "kandidaten": [
+    "STATUSBALK-A",
+    "AUBERGINE-A",
+    "AUBERGINE-E",
+    "AUBERGINE-F",
+    "BUREAUBLAD-A"
+   ]
   },
   {
    "woord": "oké",
    "kandidaten": [
-    "POKEMON-A"
+    "POKEMON-A",
+    "AAS-A",
+    "AAS-B",
+    "ARTISJOK-A",
+    "AUTOKOFFER-A",
+    "AVARUA(COK)-A",
+    "BREKEN-A",
+    "COOKEILANDEN(NZL)-A",
+    "ERGEREN-B"
    ]
-  },
-  {
-   "woord": "naar huis",
-   "kandidaten": []
-  },
-  {
-   "woord": "ik hou van jou",
-   "kandidaten": []
   }
  ],
  "fouten": []
