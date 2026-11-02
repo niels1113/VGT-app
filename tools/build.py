@@ -46,7 +46,7 @@ def clean(s):
 def search(word):
     q = urllib.parse.quote(word)
     page = get(f"{BASE}/signs/search/?keyword={q}")
-    page = re.sub(r"(?s)<!--.*?-->", "", page)
+    page = page.replace("<!--", "").replace("-->", "")
     global HEADERS
     if HEADERS is None:
         HEADERS = [clean(h) for h in re.findall(r"(?s)<th[^>]*>(.*?)</th>", page)]
@@ -193,12 +193,12 @@ def main():
     for w in words_from_app():
         if w in data and not force:
             report["gevonden"].append(w)
-            if not data[w].get("cells"):
+            if not data[w].get("cells2"):
                 try:
                     for term in [w] + ALIASES.get(w, []):
                         hit = [r for r in search(term) if r["id"] == data[w]["id"]]
                         if hit:
-                            data[w]["cells"] = hit[0]["cells"]
+                            data[w]["cells2"] = hit[0]["cells"]
                             break
                 except Exception as e:
                     report["fouten"].append({"woord": w, "fout": "cells: " + str(e)[:200]})
@@ -226,7 +226,7 @@ def main():
                 tmp = f.name
             frames, dur = analyze(tmp)
             os.unlink(tmp)
-            data[w] = {"url": url, "gloss": best["gloss"], "id": best["id"], "dur": dur, "frames": frames, "cells": best["cells"]}
+            data[w] = {"url": url, "gloss": best["gloss"], "id": best["id"], "dur": dur, "frames": frames, "cells2": best["cells"]}
             report["gevonden"].append(w)
             print("OK", w, best["gloss"], len(frames), flush=True)
             json.dump(data, open(OUT, "w"), ensure_ascii=False, separators=(",", ":"))
