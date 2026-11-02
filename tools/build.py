@@ -154,6 +154,7 @@ def analyze(path):
 
 def main():
     force = "--force" in sys.argv
+    os.makedirs("data", exist_ok=True)
     data = json.load(open(OUT)) if os.path.exists(OUT) else {}
     report = {"gevonden": [], "niet_gevonden": [], "fouten": []}
     for w in words_from_app():
