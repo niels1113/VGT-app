@@ -57,7 +57,7 @@ a{color:var(--blue)}
 .btn.gold{background:var(--gold);box-shadow:0 4px 0 var(--gold-d)}
 .btn:disabled{background:#e5e5e5;color:#afafaf;box-shadow:0 4px 0 #d0d0d0;cursor:default}
 .row{display:flex;gap:12px}.row .btn{flex:1}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s}
 .sheet{background:#fff;width:100%;max-width:560px;border-radius:22px 22px 0 0;padding:22px 20px 26px;animation:up .2s ease-out}
 .sheet h3{margin:0 0 4px;font-size:22px;font-weight:900}
 .sheet p{margin:0 0 18px;color:var(--muted)}
@@ -536,6 +536,14 @@ async function analyzeWord(w, onProg){
     return out;
   } finally { v.remove(); }
 }
+async function fixWithFile(w, f){
+  if(!f) return;
+  try{ await putVid(w, f); }catch(e){ toast("Opslaan mislukt"); return; }
+  closeLayer();
+  const r = $("ref"); if(r){ r.src = VIDS[w]; r.play().catch(() => {}); }
+  toast("Bestand opgeslagen");
+  if(P && P.w === w) pGo();
+}
 function progress(text, p){
   if(!$("progbox")) $("layer").innerHTML = `<div class="overlay modal" style="z-index:60"><div class="sheet" style="text-align:center" id="progbox">${MASCOT(70)}<p id="progtxt"></p><div class="prog"><div id="progbar"></div></div></div></div>`;
   $("progtxt").innerHTML = text; $("progbar").style.width = Math.round(p*100) + "%";
@@ -546,10 +554,21 @@ async function ensureFrames(w){
   try{ await analyzeWord(w, p => progress(`Voorbeeld analyseren… <b>${esc(w)}</b>`, p)); closeLayer(); return true; }
   catch(e){
     closeLayer();
-    const msg = e.message === "cors"
-      ? "De server van het woordenboek laat niet toe dat deze app hun video analyseert (de video afspelen lukt wel). Download de video en kies ze als bestand bij <b>Video's</b>, dan werkt de camera-oefening wel."
-      : "Het voorbeeld kon niet geanalyseerd worden. Probeer een andere video.";
-    modal("Vergelijken lukt niet", msg, "Oké", () => {}, null, false);
+    const remote = REMOTE.has(w);
+    $("layer").innerHTML = `<div class="overlay modal"><div class="sheet">
+      <h3>Nog één stap voor “${esc(w)}”</h3>
+      <p class="info" style="margin-top:0">${remote
+        ? "De video van het woordenboek mag hier wel afspelen, maar de app mag hem niet analyseren. Dat blokkeert hun server. Met het videobestand op je gsm lukt het wel:"
+        : "Deze video kon niet geanalyseerd worden. Kies een ander videobestand."}</p>
+      ${remote ? `<ol class="info" style="padding-left:20px;margin:0 0 14px">
+        <li>Tik op <b>Open de video</b>.</li>
+        <li><b>Android:</b> menu ⋮ → downloadicoon. <b>iPhone:</b> deelknop → <i>Bewaar in Bestanden</i>.</li>
+        <li>Kom terug en tik op <b>Kies het bestand</b>.</li></ol>
+        <a class="btn ghost" href="${esc(VIDS[w])}" target="_blank" rel="noopener">⬇️ Open de video</a>` : ""}
+      <label class="btn" style="margin-top:12px">📁 Kies het bestand<input type="file" accept="video/*" onchange="fixWithFile('${w}', this.files[0])"></label>
+      <button class="btn ghost" style="margin-top:12px" onclick="closeLayer()">Sluiten</button>
+      <p class="info" style="font-size:12px;margin:10px 0 0">Foutcode: ${esc(e.message || e)}</p>
+    </div></div>`;
     return false;
   }
 }
