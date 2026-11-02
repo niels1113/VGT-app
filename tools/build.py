@@ -87,8 +87,27 @@ ALIASES = {
 }
 
 
-def video_url(gid):
-    page = get(f"{BASE}/dictionary/gloss/{gid}/")
+def parse_details(page):
+    page = re.sub(r"(?s)<!--.*?-->", "", page)
+    page = re.sub(r"(?s)<(script|style).*?</\1>", "", page)
+    det = {}
+    for th, td in re.findall(r"(?s)<th[^>]*>(.*?)</th>\s*<td[^>]*>(.*?)</td>", page):
+        k, v = clean(th).rstrip(":"), clean(td)
+        if k and v and len(k) < 60 and len(v) < 300 and k not in det:
+            det[k] = v
+    for lab, val in re.findall(r'(?s)<label[^>]*>(.*?)</label>\s*(?:</[^>]+>\s*)*<[^>]+>(.*?)<', page):
+        k, v = clean(lab).rstrip(":"), clean(val)
+        if k and v and len(k) < 60 and len(v) < 300 and k not in det:
+            det[k] = v
+    return det
+
+
+def gloss_page(gid):
+    return get(f"{BASE}/dictionary/gloss/{gid}/")
+
+
+def video_url(gid, page=None):
+    page = page or get(f"{BASE}/dictionary/gloss/{gid}/")
     m = re.search(r'(/dictionary/protected_media/glossvideo/[^"\']+?\.mp4)', page)
     return BASE + m.group(1) if m else None
 
@@ -170,6 +189,14 @@ def main():
     for w in words_from_app():
         if w in data and not force:
             report["gevonden"].append(w)
+            if "details" not in data[w]:
+                try:
+                    pg = gloss_page(data[w]["id"])
+                    data[w]["details"] = parse_details(pg)
+                    if not os.path.exists("data/debug_gloss.txt"):
+                        open("data/debug_gloss.txt", "w").write(re.sub(r"(?s)<(script|style).*?</\1>", "", pg)[:60000])
+                except Exception as e:
+                    report["fouten"].append({"woord": w, "fout": "details: " + str(e)[:200]})
             continue
         try:
             best, cands = None, []
@@ -184,7 +211,8 @@ def main():
             if not best:
                 report["niet_gevonden"].append({"woord": w, "kandidaten": cands[:10]})
                 continue
-            url = video_url(best["id"])
+            pg = gloss_page(best["id"])
+            url = video_url(best["id"], pg)
             if not url:
                 report["niet_gevonden"].append({"woord": w, "gloss": best["gloss"], "reden": "geen video"})
                 continue
@@ -193,7 +221,7 @@ def main():
                 tmp = f.name
             frames, dur = analyze(tmp)
             os.unlink(tmp)
-            data[w] = {"url": url, "gloss": best["gloss"], "id": best["id"], "dur": dur, "frames": frames}
+            data[w] = {"url": url, "gloss": best["gloss"], "id": best["id"], "dur": dur, "frames": frames, "details": parse_details(pg)}
             report["gevonden"].append(w)
             print("OK", w, best["gloss"], len(frames), flush=True)
             json.dump(data, open(OUT, "w"), ensure_ascii=False, separators=(",", ":"))
