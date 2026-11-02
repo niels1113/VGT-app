@@ -157,7 +157,18 @@ h1.t{font-size:24px;font-weight:900;margin:6px 0 6px}
 .recdot{position:absolute;right:10px;bottom:10px;z-index:3;background:var(--red);color:#fff;font-size:12px;border-radius:8px;padding:3px 8px;animation:blink 1s infinite}
 @keyframes blink{50%{opacity:.5}}
 .rbar{position:absolute;left:0;bottom:0;height:5px;background:var(--red);z-index:3;transition:width .1s linear}
-.sfoot{padding:12px 14px calc(14px + env(safe-area-inset-bottom))}
+.sfoot{padding:12px 14px calc(14px + env(safe-area-inset-bottom));max-height:62vh;overflow:auto}
+.fbl{display:grid;gap:8px;text-align:left;margin:6px 0 12px}
+.fbi{display:flex;gap:10px;align-items:flex-start;border-radius:12px;padding:9px 11px;font-size:14px;line-height:1.4;background:var(--soft)}
+.fbi.good{background:#f1ffe6}.fbi.bad{background:#fff3f3}
+.fbi small{color:var(--muted);font-weight:700}
+.fbic{font-size:18px;line-height:1.2}
+.dets{display:grid;gap:8px;margin:12px 0 0}
+.dets div{background:var(--soft);border-radius:12px;padding:9px 12px;font-size:14px;line-height:1.4}
+.dets b{display:block;font-weight:900}
+.dets span{color:#666}
+.pdets{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 6px}
+.pdets span{background:var(--soft);border-radius:10px;padding:4px 9px;font-size:13px}
 .result{text-align:center}
 .score{font-size:46px;font-weight:900;line-height:1}
 .verdict{font-size:20px;font-weight:900;margin:4px 0 10px}
@@ -270,7 +281,7 @@ function load(){
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 /* ---------- eigen video's (IndexedDB, alleen op dit toestel) ---------- */
-let VDB = null; const VIDS = {}, REMOTE = new Set(), FR = {}, BUILT = new Set();
+let VDB = null; const VIDS = {}, REMOTE = new Set(), FR = {}, BUILT = new Set(), DET = {};
 const DEFAULT_URLS = {"hallo": "https://vlaamsegebarentaal.be/signbank/dictionary/protected_media/glossvideo/HA/HALLO-A-16601.mp4"};
 function openVDB(){ return new Promise((res, rej) => { const r = indexedDB.open("handig-vgt-videos", 2);
   r.onupgradeneeded = () => { const d = r.result; if(!d.objectStoreNames.contains("v")) d.createObjectStore("v"); if(!d.objectStoreNames.contains("f")) d.createObjectStore("f"); };
@@ -297,6 +308,7 @@ async function loadVids(){
       Object.entries(data).forEach(([w, d]) => {
         if(!VIDS[w]){ setLive(w, d.url); BUILT.add(w); }
         if(BUILT.has(w) && d.frames && d.frames.length) FR[w] = {frames: d.frames, dur: d.dur};
+        if(d.cells2 && d.cells2.length > 9) DET[w] = {gloss: d.gloss, hs: d.cells2[8], loc: d.cells2[9]};
       });
     }
   }catch(e){}
@@ -494,7 +506,194 @@ function compare(refFrames, usrFrames){
   const avg = parts.vorm*0.35 + parts.plaats*0.3 + parts.beweging*0.2 + parts.handen*0.15;
   const worst = Math.min(parts.vorm, parts.plaats, parts.beweging, parts.handen);
   const total = Math.round(avg * (0.55 + 0.45 * worst / 100));
-  return {total, parts, raw:{sh, ps, md, pen, dy, ratio}};
+  return {total, parts, raw:{sh, ps, md, pen, dy, ratio}, A, B, path};
+}
+/* ---------- handvorm & plaats (Signbank-details) ---------- */
+const HS_NL = {
+  "B": "platte hand, vingers gestrekt en tegen elkaar",
+  "5": "open hand, alle vingers gestrekt en gespreid",
+  "1": "wijsvinger gestrekt, de andere vingers in een vuist",
+  "A": "vuist, duim tegen de zijkant van de wijsvinger",
+  "S": "vuist, duim over de vingers",
+  "Y": "duim en pink gestrekt, de rest in een vuist",
+  "V": "wijs- en middelvinger gestrekt en gespreid",
+  "H": "wijs- en middelvinger gestrekt en tegen elkaar",
+  "W": "wijs-, middel- en ringvinger gestrekt en gespreid",
+  "C": "gebogen hand in de vorm van een C",
+  "O": "vingertoppen raken de duim, als een O",
+  "bO": "wijsvinger en duim vormen een kleine O",
+  "L": "duim en wijsvinger gestrekt, als een L"
+};
+function hsText(code){
+  if(!code || code === "None") return "";
+  const base = code.replace(/["^]/g, "");
+  let t = HS_NL[code] || HS_NL[base] || "";
+  if(t && code.includes('"')) t += ", maar met gebogen vingers (klauw)";
+  return t || "bekijk de vorm goed in de video";
+}
+const LOC_NL = {
+  "Neutral space": "voor je lichaam (neutrale ruimte)", "Chest": "je borst", "Cheek": "je wang", "Chin": "je kin",
+  "Mouth": "je mond", "Nose": "je neus", "Forehead": "je voorhoofd", "Eye": "je oog", "Ear": "je oor",
+  "Neck": "je hals", "Shoulders": "je schouder", "Belly": "je buik", "Temple": "je slaap", "Head": "je hoofd",
+  "Weak hand: palm": "de handpalm van je andere hand", "Weak hand: back": "de rug van je andere hand"
+};
+const locText = l => LOC_NL[l] || l;
+function detailsFor(w){ return BUILT.has(w) && DET[w] && DET[w].loc ? DET[w] : null; }
+function detailsHtml(w){
+  const d = detailsFor(w); if(!d) return "";
+  return `<div class="dets"><div><b>✋ Handvorm ${esc(d.hs)}</b><span>${esc(hsText(d.hs))}</span></div><div><b>📍 Plaats</b><span>${esc(locText(d.loc))}</span></div></div>`;
+}
+
+// plaats meten t.o.v. gezicht/lichaam (pose) voor de verwachte locatie
+function slotHands(hands, pose, W){
+  let cx = W/2;
+  if(pose && pose[11] && pose[12]) cx = (pose[11].x + pose[12].x)/2*W;
+  const slots = [null, null];
+  const hs = hands.slice(0,2).map(lm => ({lm, x: lm[0].x*W})).sort((a,b) => a.x - b.x);
+  if(hs.length === 2){ slots[0] = hs[0].lm; slots[1] = hs[1].lm; }
+  else if(hs.length === 1){ slots[hs[0].x < cx ? 0 : 1] = hs[0].lm; }
+  return slots;
+}
+function locSample(r, W, H, loc){
+  const pose = r.pose;
+  if(!pose || !pose[11] || !pose[12] || !pose[0]) return null;
+  const P_ = i => ({x: pose[i].x*W, y: pose[i].y*H});
+  const mid = (a,b) => ({x:(a.x+b.x)/2, y:(a.y+b.y)/2});
+  const add = (a,b,k) => ({x:a.x+(b.x)*k, y:a.y+(b.y)*k});
+  const sub = (a,b) => ({x:a.x-b.x, y:a.y-b.y});
+  const dist = (a,b) => Math.hypot(a.x-b.x, a.y-b.y);
+  const nose = P_(0), mouth = mid(P_(9), P_(10)), eyes = mid(P_(2), P_(5));
+  const sm = mid(P_(11), P_(12)), sw = Math.max(10, dist(P_(11), P_(12)));
+  const fs = Math.max(8, dist(eyes, mouth));
+  const chin = add(mouth, sub(mouth, nose), 1.1);
+  const T = {
+    "Nose": [nose], "Mouth": [mouth], "Chin": [chin], "Eye": [P_(2), P_(5)], "Ear": [P_(7), P_(8)],
+    "Cheek": [mid(mouth, P_(7)), mid(mouth, P_(8))], "Forehead": [add(eyes, sub(eyes, mouth), 0.9)],
+    "Temple": [mid(P_(7), add(eyes, sub(eyes, mouth), 0.5)), mid(P_(8), add(eyes, sub(eyes, mouth), 0.5))],
+    "Head": [add(eyes, sub(eyes, mouth), 1.6)],
+    "Neck": [mid(chin, sm)], "Chest": [{x: sm.x, y: sm.y + 0.45*sw}], "Shoulders": [P_(11), P_(12)],
+    "Belly": [{x: sm.x, y: sm.y + 1.3*sw}]
+  };
+  const face = ["Nose","Mouth","Chin","Eye","Ear","Cheek","Forehead","Temple","Head"].includes(loc);
+  const tol = face ? 0.9*fs : 0.4*sw;
+  const slots = slotHands(r.hands, pose, W);
+  const pts = lm => [0,4,8,12].map(i => ({x: lm[i].x*W, y: lm[i].y*H})).concat([{x:(lm[0].x+lm[9].x)/2*W, y:(lm[0].y+lm[9].y)/2*H}]);
+  return slots.map((lm, k) => {
+    if(!lm) return null;
+    const hp = pts(lm), pc = hp[4];
+    if(loc === "Neutral space"){
+      const nearFace = dist(pc, nose) < 1.6*fs || pc.y < chin.y;
+      const inBox = pc.y > sm.y - 0.3*sw && pc.y < sm.y + 1.6*sw;
+      return {neutral: !nearFace && inBox, d: 0, dy: pc.y < chin.y ? -1 : (pc.y > sm.y + 1.6*sw ? 1 : 0)};
+    }
+    let targets = T[loc];
+    if(!targets && loc.startsWith("Weak hand")){
+      const other = slots[1-k]; if(!other) return {d: 9, dy: 0, noOther: true};
+      targets = [{x:(other[0].x+other[9].x)/2*W, y:(other[0].y+other[9].y)/2*H}];
+    }
+    if(!targets) return null;
+    let best = {d: 1e9, dy: 0};
+    targets.forEach(t => hp.forEach(p => { const d = dist(p, t); if(d < best.d) best = {d, dy: t.y - p.y}; }));
+    return {d: best.d / tol, dy: best.dy / tol};
+  });
+}
+function locCheck(locs, slot, loc){
+  const xs = locs.map(f => f && f[slot]).filter(Boolean);
+  if(xs.length < 3) return {ok:null, msg:"Ik kon je gezicht of schouders niet goed zien om de plaats te controleren. Zorg dat je hoofd en schouders in beeld zijn."};
+  const where = locText(loc);
+  if(loc === "Neutral space"){
+    const frac = xs.filter(x => x.neutral).length / xs.length;
+    if(frac >= 0.5) return {ok:true, msg:`Je hand zit goed ${where}.`};
+    const high = xs.filter(x => x.dy < 0).length > xs.filter(x => x.dy > 0).length;
+    return {ok:false, msg:`Dit gebaar maak je ${where}. Jouw hand zat ${high ? "te dicht bij je gezicht, breng ze lager, voor je borst" : "te laag, breng ze hoger, voor je borst"}.`};
+  }
+  if(xs.some(x => x.noOther) && xs.every(x => x.noOther || x.d > 1)) return {ok:false, msg:`Bij dit gebaar raakt je hand ${where}. Ik zag maar één hand: gebruik beide handen.`};
+  const best = xs.reduce((a,b) => b.d < a.d ? b : a);
+  if(best.d <= 1) return {ok:true, msg:`Je hand kwam goed bij ${where}.`};
+  const dir = Math.abs(best.dy) > 0.5 ? (best.dy < 0 ? " Breng je hand hoger." : " Breng je hand lager.") : " Breng je hand dichterbij.";
+  return {ok:false, msg:`Je hand moet bij ${where} komen, maar bleef ${best.d > 2.5 ? "er ver vandaan" : "er net naast"}.${dir}`};
+}
+
+// vingerstanden uit genormaliseerde handvorm (pols = 0,0; maat = pols tot middelvinger-knokkel)
+const FINGERS = [["wijsvinger",5,8],["middelvinger",9,12],["ringvinger",13,16],["pink",17,20]];
+function fingerState(h){
+  const pt = k => [h.s[(k-1)*2], h.s[(k-1)*2+1]];
+  const len = a => Math.hypot(a[0], a[1]);
+  const st = {};
+  FINGERS.forEach(([n, mcp, tip]) => {
+    const r = len(pt(tip)) / Math.max(0.3, len(pt(mcp)));
+    st[n] = r > 1.6 ? 2 : r > 1.2 ? 1 : 0;
+  });
+  const t = pt(4), i5 = pt(5);
+  st.duim = Math.hypot(t[0]-i5[0], t[1]-i5[1]) > 0.55 ? 2 : 0;
+  const i8 = pt(8), m12 = pt(12);
+  st.spreid = (st.wijsvinger === 2 && st.middelvinger === 2) ? (Math.hypot(i8[0]-m12[0], i8[1]-m12[1]) > 0.38 ? 1 : 0) : null;
+  return st;
+}
+function handshapeCheck(res, slot){
+  const pairs = res.path.filter(([a,b]) => res.A[a][slot] && res.B[b][slot]);
+  if(pairs.length < 3) return {ok:null, msg:"Ik zag je dominante hand niet lang genoeg om de handvorm te controleren."};
+  const keys = ["wijsvinger","middelvinger","ringvinger","pink","duim"];
+  const cnt = {}; keys.forEach(k => cnt[k] = {r:[0,0,0], u:[0,0,0]});
+  let spR = [0,0], spU = [0,0];
+  pairs.forEach(([a,b]) => {
+    const r = fingerState(res.A[a][slot]), u = fingerState(res.B[b][slot]);
+    keys.forEach(k => { cnt[k].r[r[k]]++; cnt[k].u[u[k]]++; });
+    if(r.spreid !== null && u.spreid !== null){ spR[r.spreid]++; spU[u.spreid]++; }
+  });
+  const maj = arr => arr.indexOf(Math.max(...arr));
+  const NAME = ["dicht (in je vuist)","half gebogen","gestrekt"];
+  const msgs = [];
+  keys.forEach(k => {
+    const r = maj(cnt[k].r), u = maj(cnt[k].u);
+    if(k === "duim"){
+      if(r !== u) msgs.push({sev:1, t: r === 2 ? "Je <b>duim</b> moet <b>van je hand weg</b> staan." : "Houd je <b>duim tegen je hand</b>."});
+    } else if(r !== u){
+      msgs.push({sev: Math.abs(r-u), t:`Je <b>${k}</b> moet <b>${NAME[r]}</b> zijn, bij jou was die ${NAME[u]}.`});
+    }
+  });
+  if(spR[0]+spR[1] > 2 && spU[0]+spU[1] > 2){
+    const r = maj(spR), u = maj(spU);
+    if(r !== u) msgs.push({sev:1, t: r ? "<b>Spreid</b> je vingers meer." : "Houd je vingers <b>tegen elkaar</b>."});
+  }
+  msgs.sort((a,b) => b.sev - a.sev);
+  if(!msgs.length) return {ok:true, msg:"Je handvorm komt overeen met de video."};
+  return {ok:false, msg: msgs.slice(0,3).map(m => m.t).join("<br>")};
+}
+const HS_TPL = {"1":[2,0,0,0],"5":[2,2,2,2],"B":[2,2,2,2],"A":[0,0,0,0],"S":[0,0,0,0],"Y":[0,0,0,2],"V":[2,2,0,0],"H":[2,2,0,0],"W":[2,2,2,0]};
+function pickRefSlot(A, code){
+  const tpl = HS_TPL[code];
+  let best = 0, bs = -1;
+  [0,1].forEach(k => {
+    const act = A.map(f => f[k]).filter(h => h && h.p[1] < 1.4);
+    if(!act.length) return;
+    let sc = act.length;
+    if(tpl) sc += 1000 * act.filter(h => { const st = fingerState(h); return FINGERS.every(([n], i) => st[n] === tpl[i]); }).length / act.length;
+    if(sc > bs){ bs = sc; best = k; }
+  });
+  return best;
+}
+function detailedFeedback(res, w){
+  if(!res.path) return null;
+  const det = detailsFor(w);
+  const refSlot = pickRefSlot(res.A, det && det.hs);
+  const out = [];
+  const hs = handshapeCheck(res, refSlot);
+  out.push({icon:"✋", title: "Handvorm" + (det && det.hs && det.hs !== "None" ? ` ${det.hs}` : ""), ...hs, sub: det ? hsText(det.hs) : ""});
+  if(det && P && P.locs && P.locs.length){
+    out.push({icon:"📍", title:"Plaats", ...locCheck(P.locs, refSlot, det.loc), sub: locText(det.loc)});
+  } else {
+    out.push({icon:"📍", title:"Plaats", ok: res.parts.plaats >= 70, msg: res.parts.plaats >= 70 ? "Je hand zit op ongeveer dezelfde plek als in de video." : (res.raw.dy > 0.2 ? "Je hand zit <b>lager</b> dan in de video." : res.raw.dy < -0.2 ? "Je hand zit <b>hoger</b> dan in de video." : "Je hand zit op een andere plek dan in de video.")});
+  }
+  out.push({icon:"↔️", title:"Beweging", ok: res.parts.beweging >= 65, msg: res.parts.beweging >= 65 ? "De beweging lijkt op die in de video." : (res.raw.ratio < 0.5 ? "Je beweging is <b>veel kleiner of groter</b> dan in de video." : "Kijk naar de <b>richting</b> van de beweging en hoe vaak die herhaald wordt. Zet de video op 0,5×.")});
+  if(res.parts.handen < 70) out.push({icon:"🙌", title:"Handen", ok:false, msg:"Gebruik je evenveel handen als in de video?"});
+  out.push({icon:"🙂", title:"Mimiek", ok:null, msg:"Die meet de app niet: kijk zelf naar het gezicht in de video."});
+  return out;
+}
+function feedbackHtml(items){
+  return `<div class="fbl">${items.map(it => `<div class="fbi ${it.ok===true?"good":it.ok===false?"bad":"na"}">
+    <span class="fbic">${it.ok===true?"✅":it.ok===false?"❌":it.icon}</span>
+    <div><b>${it.title}</b>${it.sub ? ` <small>· ${esc(it.sub)}</small>` : ""}<br>${it.msg}</div></div>`).join("")}</div>`;
 }
 function tipFor(res){
   const p = res.parts, tips = [];
@@ -615,7 +814,7 @@ function camLoop(){
       drawHands(cam.canvas, r.hands, v.videoWidth, v.videoHeight);
       cam.seen = r.hands.length;
       const hk = $("handok"); if(hk) hk.textContent = r.hands.length ? `✋ ${r.hands.length} hand${r.hands.length>1?"en":""} gezien` : "Geen handen in beeld";
-      if(cam.onFrame) cam.onFrame(frameFeat(r.hands, r.pose, v.videoWidth, v.videoHeight));
+      if(cam.onFrame) cam.onFrame(frameFeat(r.hands, r.pose, v.videoWidth, v.videoHeight), r, v.videoWidth, v.videoHeight);
     }catch(e){ console.warn(e); }
   }
   cam.raf = requestAnimationFrame(camLoop);
@@ -644,7 +843,7 @@ async function openPractice(w, onDone){
       <span class="vlabel">Voorbeeld</span><div class="vtools"><button onclick="pSpeed()" id="spd">1×</button><button onclick="pMirror()">⇋ Spiegel</button></div></div>
     <div class="vbox" id="pbox" style="flex:1.1"><div class="vstack"><video id="pvid" playsinline muted></video><canvas id="pcan"></canvas></div>
       <span class="vlabel">Jij</span><span class="handok" id="handok"></span></div>
-   </div><div class="sfoot" id="pctl"></div>`;
+   </div>${detailsFor(w) ? `<div class="pdets" style="padding-top:8px"><span>✋ ${esc(detailsFor(w).hs)}: ${esc(hsText(detailsFor(w).hs))}</span><span>📍 ${esc(locText(detailsFor(w).loc))}</span></div>` : ""}<div class="sfoot" id="pctl"></div>`;
   $("ref").play().catch(() => {});
   pControls();
   cam.facing = "user";
@@ -678,7 +877,9 @@ async function pGo(){
   const ref = $("ref"); ref.currentTime = 0; ref.play().catch(() => {});
   const len = Math.min(9, Math.max(2.5, (FR[w].dur || 3) / P.speed + 1.2));
   P.frames = []; P.recording = true; P.stopNow = false;
-  cam.onFrame = f => P && P.frames.push(f);
+  P.locs = [];
+  const det = detailsFor(w);
+  cam.onFrame = (f, r, W, H) => { if(!P) return; P.frames.push(f); if(det) P.locs.push(locSample(r, W, H, det.loc)); };
   box.insertAdjacentHTML("beforeend", `<span class="recdot" id="recdot">● REC</span><div class="rbar" id="rbar" style="width:0"></div>`);
   $("pctl").innerHTML = `<button class="btn red" onclick="P.stopNow=true">⏹ Klaar</button>`;
   const t0 = performance.now();
@@ -696,6 +897,17 @@ async function pGo(){
 function pResult(res){
   const el = $("pctl"); if(!el) return;
   if(res.error){ el.innerHTML = `<div class="tip">⚠️ ${res.error}</div><button class="btn" onclick="pGo()">Opnieuw proberen</button>`; return; }
+  const fb = detailedFeedback(res, P.w);
+  if(fb){
+    const hs = fb[0], pl = fb[1];
+    if(hs.ok === false) res.parts.vorm = Math.min(res.parts.vorm, 55);
+    if(pl.ok === false) res.parts.plaats = Math.min(res.parts.plaats, 45);
+    if(pl.ok === true) res.parts.plaats = Math.max(res.parts.plaats, 80);
+    const avg = res.parts.vorm*0.35 + res.parts.plaats*0.3 + res.parts.beweging*0.2 + res.parts.handen*0.15;
+    const worst = Math.min(res.parts.vorm, res.parts.plaats, res.parts.beweging, res.parts.handen);
+    res.total = Math.round(avg * (0.55 + 0.45 * worst / 100));
+    res.fb = fb;
+  }
   if(!P.best || res.total > P.best.total) P.best = res;
   const col = v => v >= 75 ? "#58cc02" : v >= 50 ? "#ffc800" : "#ff4b4b";
   const verdict = res.total >= 75 ? "Goed gedaan! 🎉" : res.total >= 50 ? "Bijna! 💪" : "Nog eens proberen 🔁";
@@ -703,7 +915,7 @@ function pResult(res){
   el.innerHTML = `<div class="result">
     <div class="score" style="color:${col(res.total)}">${res.total}</div><div class="verdict">${verdict}</div>
     <div class="bars">${bar("Handvorm",res.parts.vorm)}${bar("Plaats",res.parts.plaats)}${bar("Beweging",res.parts.beweging)}${bar("Handen",res.parts.handen)}</div>
-    <div class="tip">💡 ${tipFor(res)}</div>
+    ${res.fb ? feedbackHtml(res.fb) : `<div class="tip">💡 ${tipFor(res)}</div>`}
     <div class="row"><button class="btn ghost" onclick="pGo()">Opnieuw</button>${P.onDone ? `<button class="btn" onclick="closePractice()">Doorgaan</button>` : `<button class="btn" onclick="closePractice()">Klaar</button>`}</div></div>`;
 }
 function pillHtml(){
@@ -862,7 +1074,7 @@ async function saveUrl(w){
 }
 function previewVid(w){
   $("layer").innerHTML = `<div class="overlay" onclick="if(event.target===this)closeLayer()"><div class="sheet">
-    <div class="wordhead">${w}</div>${vidTag(w)}
+    <div class="wordhead">${w}</div>${vidTag(w)}${detailsHtml(w)}
     <div class="row" style="margin-top:16px"><button class="btn ghost" onclick="delVid('${w}').then(()=>{closeLayer();render()})">Verwijderen</button><button class="btn blue" onclick="openPractice('${w}')">📷 Oefen</button></div>
     <button class="btn" style="margin-top:12px" onclick="closeLayer()">Sluiten</button>
   </div></div>`;
@@ -970,7 +1182,7 @@ function renderLesson(){
   let body = "", foot = "";
   if(s.t==="intro" && VIDS[s.w]){
     body = `<span class="tag">✨ Nieuw gebaar</span><h2>Leer dit gebaar</h2>
-     <div class="wordhead">${s.e} ${s.w}</div>${vidTag(s.w)}
+     <div class="wordhead">${s.e} ${s.w}</div>${vidTag(s.w)}${detailsHtml(s.w)}
      <div class="tips">💡 Doe het gebaar 3× na. Let op <b>handvorm</b>, <b>plaats</b>, <b>beweging</b>, <b>oriëntatie</b> en <b>mimiek</b>. Gaat het te snel? Zet de video op 0,5×.</div>`;
     foot = `<button class="btn" onclick="L.good++;advance()">Ik heb het nagedaan</button>`;
   }
@@ -1051,7 +1263,11 @@ function feedback(){
   if(L.res==="ok") title = ["Goed zo!","Prima!","Super!","Helemaal juist!"][Math.floor(Math.random()*4)];
   else if(L.res==="bad"){ title = "Niet helemaal"; txt = `Juist antwoord: <b>${esc(L._ans)}</b>${s.e?"<br>"+s.e:""}`; }
   else { title = "Geen probleem"; txt = `“${s.w}” komt straks nog eens terug. Bekijk het gebaar gerust opnieuw.`; }
-  if(s.t==="cam" && L.camRes){ title = (L.camRes.total >= 75 ? "Goed gedaan! Score " : L.res==="ok" ? "Geslaagd! Score " : "Bijna! Score ") + L.camRes.total; txt = tipFor(L.camRes) + (L.res==="ok" ? "" : "<br>Dit gebaar komt straks nog eens terug."); }
+  if(s.t==="cam" && L.camRes){
+    title = (L.camRes.total >= 75 ? "Goed gedaan! Score " : L.res==="ok" ? "Geslaagd! Score " : "Bijna! Score ") + L.camRes.total;
+    const bad = (L.camRes.fb || []).filter(x => x.ok === false).map(x => x.msg);
+    txt = (bad.length ? bad.slice(0,2).join("<br>") : tipFor(L.camRes)) + (L.res==="ok" ? "" : "<br>Dit gebaar komt straks nog eens terug.");
+  }
   const cls = L.res==="bad" ? "red" : L.res==="meh" ? "gold" : "";
   return `<div class="fb"><b>${L.res==="ok"?"✅":L.res==="bad"?"❌":"💪"} ${title}</b>${txt?`<p>${txt}</p>`:""}</div>
     <button class="btn ${cls}" onclick="advance()">Doorgaan</button>`;
