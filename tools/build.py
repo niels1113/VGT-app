@@ -7,6 +7,7 @@ import cv2, mediapipe as mp
 from mediapipe.tasks import python as mpt
 from mediapipe.tasks.python import vision
 
+HEADERS = None
 BASE = "https://vlaamsegebarentaal.be/signbank"
 UA = {"User-Agent": "Mozilla/5.0 (persoonlijke VGT-leerapp; 1 verzoek per seconde)"}
 OUT = "data/signs.json"
@@ -46,6 +47,9 @@ def search(word):
     q = urllib.parse.quote(word)
     page = get(f"{BASE}/signs/search/?keyword={q}")
     page = re.sub(r"(?s)<!--.*?-->", "", page)
+    global HEADERS
+    if HEADERS is None:
+        HEADERS = [clean(h) for h in re.findall(r"(?s)<th[^>]*>(.*?)</th>", page)]
     rows = []
     for tr in re.findall(r"(?s)<tr.*?</tr>", page):
         m = re.search(r'href="[^"]*?/dictionary/gloss/(\d+)/?"[^>]*>(.*?)</a>', tr, re.S)
@@ -189,14 +193,15 @@ def main():
     for w in words_from_app():
         if w in data and not force:
             report["gevonden"].append(w)
-            if "details" not in data[w]:
+            if not data[w].get("cells"):
                 try:
-                    pg = gloss_page(data[w]["id"])
-                    data[w]["details"] = parse_details(pg)
-                    if not os.path.exists("data/debug_gloss.txt"):
-                        open("data/debug_gloss.txt", "w").write(re.sub(r"(?s)<(script|style).*?</\1>", "", pg)[:60000])
+                    for term in [w] + ALIASES.get(w, []):
+                        hit = [r for r in search(term) if r["id"] == data[w]["id"]]
+                        if hit:
+                            data[w]["cells"] = hit[0]["cells"]
+                            break
                 except Exception as e:
-                    report["fouten"].append({"woord": w, "fout": "details: " + str(e)[:200]})
+                    report["fouten"].append({"woord": w, "fout": "cells: " + str(e)[:200]})
             continue
         try:
             best, cands = None, []
@@ -221,7 +226,7 @@ def main():
                 tmp = f.name
             frames, dur = analyze(tmp)
             os.unlink(tmp)
-            data[w] = {"url": url, "gloss": best["gloss"], "id": best["id"], "dur": dur, "frames": frames, "details": parse_details(pg)}
+            data[w] = {"url": url, "gloss": best["gloss"], "id": best["id"], "dur": dur, "frames": frames, "cells": best["cells"]}
             report["gevonden"].append(w)
             print("OK", w, best["gloss"], len(frames), flush=True)
             json.dump(data, open(OUT, "w"), ensure_ascii=False, separators=(",", ":"))
@@ -229,6 +234,7 @@ def main():
             report["fouten"].append({"woord": w, "fout": str(e)[:300]})
             print("FOUT", w, e, flush=True)
     json.dump(data, open(OUT, "w"), ensure_ascii=False, separators=(",", ":"))
+    report["kolommen"] = HEADERS
     json.dump(report, open(REPORT, "w"), ensure_ascii=False, indent=1)
 
 
