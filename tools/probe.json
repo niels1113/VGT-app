@@ -1,193 +1,74 @@
 {
- "https://woordenboek.vlaamsegebarentaal.be/": {
+ "appjs": {
   "status": 200,
-  "headers": {
-   "Content-Length": "863",
-   "Content-Type": "text/html; charset=utf-8"
-  },
-  "mp4": [],
-  "links": [
-   "/",
-   "css/app.41e9d3a6.css",
-   "css/chunk-vendors.b9812f96.css",
-   "favicon.ico",
-   "js/app-legacy.8f3720f3.js",
-   "js/app.8dc66aae.js",
-   "js/chunk-vendors-legacy.376dc7eb.js",
-   "js/chunk-vendors.376dc7eb.js"
-  ],
-  "scripts_api": [],
-  "snippet": "<!doctype html><html lang=\"en\"><head><base href=\"/\"/><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><link rel=\"icon\" href=\"favicon.ico\"/><script defer=\"defer\" src=\"js/chunk-vendors.376dc7eb.js\" type=\"module\"></script><script defer=\"defer\" src=\"js/app.8dc66aae.js\" type=\"module\"></script><link href=\"css/chunk-vendors.b9812f96.css\" rel=\"stylesheet\"><link href=\"css/app.41e9d3a6.css\" rel=\"stylesheet\"><script defer=\"defer\" src=\"js/chunk-vendors-legacy.376dc7eb.js\" nomodule></script><script defer=\"defer\" src=\"js/app-legacy.8f3720f3.js\" nomodule></script></head><body><noscript><strong>We're sorry but Woordenboek Vlaamse Gebarentaal doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=\"app\"></div></body></html>"
- },
- "https://woordenboek.vlaamsegebarentaal.be/search?query=hallo": {
-  "status": 200,
-  "headers": {
-   "Content-Length": "863",
-   "Content-Type": "text/html; charset=utf-8"
-  },
-  "mp4": [],
-  "links": [
-   "/",
-   "css/app.41e9d3a6.css",
-   "css/chunk-vendors.b9812f96.css",
-   "favicon.ico",
-   "js/app-legacy.8f3720f3.js",
-   "js/app.8dc66aae.js",
-   "js/chunk-vendors-legacy.376dc7eb.js",
-   "js/chunk-vendors.376dc7eb.js"
-  ],
-  "scripts_api": [],
-  "snippet": "<!doctype html><html lang=\"en\"><head><base href=\"/\"/><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><link rel=\"icon\" href=\"favicon.ico\"/><script defer=\"defer\" src=\"js/chunk-vendors.376dc7eb.js\" type=\"module\"></script><script defer=\"defer\" src=\"js/app.8dc66aae.js\" type=\"module\"></script><link href=\"css/chunk-vendors.b9812f96.css\" rel=\"stylesheet\"><link href=\"css/app.41e9d3a6.css\" rel=\"stylesheet\"><script defer=\"defer\" src=\"js/chunk-vendors-legacy.376dc7eb.js\" nomodule></script><script defer=\"defer\" src=\"js/app-legacy.8f3720f3.js\" nomodule></script></head><body><noscript><strong>We're sorry but Woordenboek Vlaamse Gebarentaal doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=\"app\"></div></body></html>"
- },
- "https://woordenboek.vlaamsegebarentaal.be/zoeken?q=hallo": {
-  "status": 200,
-  "headers": {
-   "Content-Length": "863",
-   "Content-Type": "text/html; charset=utf-8"
-  },
-  "mp4": [],
-  "links": [
-   "/",
-   "css/app.41e9d3a6.css",
-   "css/chunk-vendors.b9812f96.css",
-   "favicon.ico",
-   "js/app-legacy.8f3720f3.js",
-   "js/app.8dc66aae.js",
-   "js/chunk-vendors-legacy.376dc7eb.js",
-   "js/chunk-vendors.376dc7eb.js"
-  ],
-  "scripts_api": [],
-  "snippet": "<!doctype html><html lang=\"en\"><head><base href=\"/\"/><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><link rel=\"icon\" href=\"favicon.ico\"/><script defer=\"defer\" src=\"js/chunk-vendors.376dc7eb.js\" type=\"module\"></script><script defer=\"defer\" src=\"js/app.8dc66aae.js\" type=\"module\"></script><link href=\"css/chunk-vendors.b9812f96.css\" rel=\"stylesheet\"><link href=\"css/app.41e9d3a6.css\" rel=\"stylesheet\"><script defer=\"defer\" src=\"js/chunk-vendors-legacy.376dc7eb.js\" nomodule></script><script defer=\"defer\" src=\"js/app-legacy.8f3720f3.js\" nomodule></script></head><body><noscript><strong>We're sorry but Woordenboek Vlaamse Gebarentaal doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=\"app\"></div></body></html>"
- },
- "https://woordenboek.vlaamsegebarentaal.be/gloss/HALLO-A-16601": {
-  "status": 200,
-  "headers": {
-   "Content-Length": "863",
-   "Content-Type": "text/html; charset=utf-8"
-  },
-  "mp4": [],
-  "links": [
-   "/",
-   "css/app.41e9d3a6.css",
-   "css/chunk-vendors.b9812f96.css",
-   "favicon.ico",
-   "js/app-legacy.8f3720f3.js",
-   "js/app.8dc66aae.js",
-   "js/chunk-vendors-legacy.376dc7eb.js",
-   "js/chunk-vendors.376dc7eb.js"
-  ],
-  "scripts_api": [],
-  "snippet": "<!doctype html><html lang=\"en\"><head><base href=\"/\"/><meta charset=\"utf-8\"/><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><link rel=\"icon\" href=\"favicon.ico\"/><script defer=\"defer\" src=\"js/chunk-vendors.376dc7eb.js\" type=\"module\"></script><script defer=\"defer\" src=\"js/app.8dc66aae.js\" type=\"module\"></script><link href=\"css/chunk-vendors.b9812f96.css\" rel=\"stylesheet\"><link href=\"css/app.41e9d3a6.css\" rel=\"stylesheet\"><script defer=\"defer\" src=\"js/chunk-vendors-legacy.376dc7eb.js\" nomodule></script><script defer=\"defer\" src=\"js/app-legacy.8f3720f3.js\" nomodule></script></head><body><noscript><strong>We're sorry but Woordenboek Vlaamse Gebarentaal doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id=\"app\"></div></body></html>"
- },
- "https://vlaamsegebarentaal.be/signbank/dictionary/search/?query=hallo": {
-  "status": 200,
-  "headers": {
-   "Content-Type": "text/html; charset=utf-8",
-   "Content-Length": "13487"
-  },
-  "mp4": [],
-  "links": [
-   "/accounts/password/reset/",
-   "http://www.vgtc.be",
-   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
+  "len": 718683,
+  "urls": [
+   "http://www.w3.org/1999/xlink",
+   "http://www.w3.org/2000/svg",
+   "https://embed.doorbell.io/button/",
+   "https://fontawesome.com/search?ip=classic&s=light&o=r",
    "https://twitter.com/VGTCentrum",
-   "https://vlaamsegebarentaal.be/signbank/",
-   "https://vlaamsegebarentaal.be/signbank/about/",
-   "https://vlaamsegebarentaal.be/signbank/about/copyright/",
-   "https://vlaamsegebarentaal.be/signbank/about/guidelines/",
-   "https://vlaamsegebarentaal.be/signbank/about/manual/",
-   "https://vlaamsegebarentaal.be/signbank/accounts/login/?next=/",
-   "https://vlaamsegebarentaal.be/signbank/accounts/login/?next=https%3A//vlaamsegebarentaal.be/signbankhttp%3A//vlaamsegebarentaal.be/dictionary/search/%3Fquery%3Dhallo",
-   "https://vlaamsegebarentaal.be/signbank/feedback/",
-   "https://vlaamsegebarentaal.be/signbank/feedback/missing/",
-   "https://vlaamsegebarentaal.be/signbank/feedback/site/",
-   "https://vlaamsegebarentaal.be/signbank/files/static/bootstrap/css/bootstrap.min.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/footer.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/main.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/css/minimalistic_language_picker.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/css/style.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/images/VGT/VGTC_logo.png",
-   "https://vlaamsegebarentaal.be/signbank/files/static/images/favicon.png",
-   "https://vlaamsegebarentaal.be/signbank/files/static/js/jquery.dataTables.min.js",
-   "https://vlaamsegebarentaal.be/signbank/files/static/js/minimalistic_language_picker.js",
-   "https://vlaamsegebarentaal.be/signbank/i18n/setlang/",
-   "https://vlaamsegebarentaal.be/signbank/signs/",
-   "https://vlaamsegebarentaal.be/signbank/signs/homonyms/",
-   "https://vlaamsegebarentaal.be/signbank/signs/last_updated/",
-   "https://vlaamsegebarentaal.be/signbank/signs/search",
-   "https://vlaamsegebarentaal.be/signbank/signs/search/",
-   "https://vlaamsegebarentaal.be/signbank/signs/show_all/",
-   "https://vlaamsegebarentaal.be/signbank/signs/tags/",
+   "https://vlaamsegebarentaal.be/signbuddy",
+   "https://www.ae.be",
    "https://www.facebook.com/VGTCentrum/",
-   "https://www.googletagmanager.com/gtag/js?id=UA-167458804-1",
-   "https://www.instagram.com/VGTCentrum/",
-   "https://www.linkedin.com/company/vlaams-gebarentaalcentrum",
-   "mailto:info@vgtc.be"
+   "https://www.instagram.com/vgtcentrum/",
+   "https://www.instagram.com/vlaams_gebarentaalcentrum/",
+   "https://www.linkedin.com/company/vlaams-gebarentaalcentrum?trk=top_nav_home",
+   "https://www.vgtc.be",
+   "https://www.vgtc.be/privacy",
+   "https://www.vlaamsegebarentaal.be/faq",
+   "https://www.vlaamsegebarentaal.be/methodologie"
   ],
-  "scripts_api": [],
-  "snippet": "\n\n\n\n<!DOCTYPE html>\n\n\n\n\n<html>\n  <head>\n    <title>VGT Signbank</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"https://vlaamsegebarentaal.be/signbank/files/static/bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/css/style.css\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/footer.css\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/main.css\">\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n    <link rel=\"stylesheet\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/css/minimalistic_language_picker.css\">\n\n    <link rel=\"icon\" type=\"image/png\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/images/favicon.png\">\n      <style>\n          #affix-bar.affix {\n            top:0px;\n            position:fixed;\n            z-index: 9999999;\n          }\n      </style>\n\n      <!-- Global site tag (gtag.js) - Google Analytics -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-167458804-1\"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  gtag('config', 'UA-167458804-1');\n</script>\n\n    \n  </head>\n  <body>\n<di"
+  "paths": [
+   "/search",
+   "/signBuddy",
+   "/video/Dankzij-jouw-hulp-kunnen-we-SignBuddy-verder-trainen.mp4",
+   "/video/WatIsSignBuddy.mp4",
+   "/video/categorie_help.mp4",
+   "/video/etymologie_help.mp4",
+   "/video/handvorm_help.mp4",
+   "/video/label_help.mp4",
+   "/video/locatie_help.mp4",
+   "/video/regio_help.mp4"
+  ],
+  "ctx": [
+   "mponents:{SearchResultCard:d.A,MissingSignVideo:s.A,VideoPlayer:o.A,Button:c.A,SvgIcon:l.A,SignBuddy:h()}})],v),t.A=v,a()}catch(u){a(u)}}))},2492:function(e,t,n){\"use strict\";e.exports=n.p+\"img/GA_no_search_result.87df1cd5.png\"},2922:function(e,t,n){\"use strict\";n.d(t,{N:function(){return i}});class a{getIconFor(e){return{customSvg:`location/tiles/${e}_tile`}}}const i=new a},3055:function(e,t,n){\"use strict\";n.a(e,(async function(e,a){try{var i=n",
+   "\"info\",show:\"\"}},[t(\"font-awesome-icon\",{staticClass:\"mr-2\",attrs:{icon:[\"far\",\"square-info\"],size:\"xl\"}}),t(\"i18n\",{attrs:{path:\"admin.icon_disclaimer\"}},[t(\"a\",{attrs:{href:\"https://fontawesome.com/search?ip=classic&s=light&o=r\",target:\"_blank\"}},[e._v(\" \"+e._s(e.$t(\"admin.icon_disclaimer_link\"))+\" \")])])],1),t(\"form\",{attrs:{id:\"categoryForm\"},on:{submit:function(t){return t.preventDefault(),e.submit.apply(null,arguments)}}},[t(\"label\",{attrs:",
+   "ion(){var e=this,t=e._self._c;e._self._setupProxy;return e.icon.faIcon?t(\"font-awesome-icon\",{attrs:{icon:[e.icon.faIcon.iconVariant,e.icon.faIcon.iconDescription]}}):t(\"SvgIcon\",{staticClass:\"fa svg-search-type-icon\",attrs:{icon:e.icon.customSvg,fill:!0}})},i=[],r=n(31635),o=n(18657),s=n(81820),d=n(49191);function c(e,t,n){return(t=l(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}function l(e){var",
+   "if(\"object\"!=typeof a)return a;throw new TypeError(\"@@toPrimitive must return a primitive value.\")}return(\"string\"===t?String:Number)(e)}let h=class extends o.lD{constructor(...e){super(...e),c(this,\"searchType\",void 0)}get icon(){switch(this.searchType){case d.n.Category:return{faIcon:{iconDescription:\"th-large\",iconVariant:\"fas\"}};case d.n.Handshape:return{faIcon:{iconDescription:\"hand-paper\",iconVariant:\"fas\"}};case d.n.Image:return{faIcon:{ic",
+   "peError(\"@@toPrimitive must return a primitive value.\")}return(\"string\"===t?String:Number)(e)}let h=class extends o.lD{constructor(...e){super(...e),c(this,\"searchType\",void 0)}get icon(){switch(this.searchType){case d.n.Category:return{faIcon:{iconDescription:\"th-large\",iconVariant:\"fas\"}};case d.n.Handshape:return{faIcon:{iconDescription:\"hand-paper\",iconVariant:\"fas\"}};case d.n.Image:return{faIcon:{iconDescription:\"image\",iconVariant:\"fas\"}};c",
+   "omSvg:\"belgium\"};case d.n.Etymology:return{faIcon:{iconDescription:\"tree-deciduous\",iconVariant:\"fas\"}}}return{faIcon:{iconDescription:\"image\",iconVariant:\"fas\"}}}};(0,r.Cg)([(0,o.kv)()],h.prototype,\"searchType\",void 0),h=(0,r.Cg)([(0,o.uA)({components:{SvgIcon:s.A}})],h);var b=h,u=b,g=n(81656),p=(0,g.A)(u,a,i,!1,null,null,null),m=p.exports},7008:function(e,t,n){\"use strict\";n.a(e,(async function(e,a){try{var i=n(31635),r=n(18657),o=n(11298),s=n(",
+   " a;throw new TypeError(\"@@toPrimitive must return a primitive value.\")}return(\"string\"===t?String:Number)(e)}d=(c.then?(await c)():c)[0];let u=class extends r.lD{constructor(...e){super(...e),f(this,\"searchTags\",void 0),f(this,\"totalNrOfSearchResults\",void 0),f(this,\"searchResults\",void 0)}};(0,i.Cg)([(0,r.kv)()],u.prototype,\"searchTags\",void 0),(0,i.Cg)([(0,r.kv)()],u.prototype,\"totalNrOfSearchResults\",void 0),(0,i.Cg)([(0,r.kv)()],u.prototype,\"",
+   "\")}return(\"string\"===t?String:Number)(e)}d=(c.then?(await c)():c)[0];let u=class extends r.lD{constructor(...e){super(...e),f(this,\"searchTags\",void 0),f(this,\"totalNrOfSearchResults\",void 0),f(this,\"searchResults\",void 0)}};(0,i.Cg)([(0,r.kv)()],u.prototype,\"searchTags\",void 0),(0,i.Cg)([(0,r.kv)()],u.prototype,\"totalNrOfSearchResults\",void 0),(0,i.Cg)([(0,r.kv)()],u.prototype,\"searchResults\",void 0),u=(0,i.Cg)([(0,r.uA)({components:{SearchFilte",
+   "():c)[0];let u=class extends r.lD{constructor(...e){super(...e),f(this,\"searchTags\",void 0),f(this,\"totalNrOfSearchResults\",void 0),f(this,\"searchResults\",void 0)}};(0,i.Cg)([(0,r.kv)()],u.prototype,\"searchTags\",void 0),(0,i.Cg)([(0,r.kv)()],u.prototype,\"totalNrOfSearchResults\",void 0),(0,i.Cg)([(0,r.kv)()],u.prototype,\"searchResults\",void 0),u=(0,i.Cg)([(0,r.uA)({components:{SearchFilterTagList:s.A,SearchResultCard:d.A,AmountIndicator:o.A}})],u)",
+   "\",void 0),f(this,\"searchResults\",void 0)}};(0,i.Cg)([(0,r.kv)()],u.prototype,\"searchTags\",void 0),(0,i.Cg)([(0,r.kv)()],u.prototype,\"totalNrOfSearchResults\",void 0),(0,i.Cg)([(0,r.kv)()],u.prototype,\"searchResults\",void 0),u=(0,i.Cg)([(0,r.uA)({components:{SearchFilterTagList:s.A,SearchResultCard:d.A,AmountIndicator:o.A}})],u),t.A=u,a()}catch(l){a(l)}}))},7659:function(e,t,n){\"use strict\";n.d(t,{X:function(){return a},Y:function(){return i}});var",
+   "-hero__card-subtitle\"},[e._v(\"Typ een woord en ontdek het gebaar.\")]),t(\"div\",{staticClass:\"d-flex align-items-center justify-content-center mt-3\"},[t(\"SearchBar\",{staticClass:\"flex-grow-1 vgtc-hero__searchbar\",attrs:{showPrefix:!1}})],1)]),t(\"div\",{staticClass:\"vgtc-hero__card vgtc-hero__card--gesture\"},[t(\"div\",{staticClass:\"vgtc-hero__card-title d-flex align-items-center\"},[t(\"span\",{staticClass:\"vgtc-hero__card-title-icon\"},[t(\"font-awesome-i",
+   "flex-column\"},[t(\"div\",{staticClass:\"related-results-card p-4\"},[t(\"div\",{staticClass:\"d-flex align-items-center mb-4\"},[t(\"span\",{staticClass:\"related-results-card__overview__text\"},[e._v(e._s(e.$t(\"search.did_you_mean\")))])]),t(\"div\",{staticClass:\"divider divider--light\"}),t(\"div\",{staticClass:\"row mt-n4 align-items-baseline\"},e._l(e.searchResults,(function(e){return t(\"SearchResultCard\",{key:e.signId,staticClass:\"col-12 col-md-6 col-xl-4 mt-5\""
+  ]
  },
- "https://vlaamsegebarentaal.be/signbank/dictionary/gloss/16601/": {
+ "https://vlaamsegebarentaal.be/signbank/signs/search/?keyword=hallo": {
   "status": 200,
-  "headers": {
-   "Content-Type": "text/html; charset=utf-8",
-   "Content-Length": "12907"
-  },
-  "mp4": [
-   "/dictionary/protected_media/glossvideo/HA/HALLO-A-16601.mp4"
+  "glosslinks": [
+   "/dictionary/gloss/16601/",
+   "/dictionary/gloss/17000/",
+   "/dictionary/gloss/21041/",
+   "/dictionary/gloss/4700/"
   ],
-  "links": [
-   "/dictionary/protected_media/glossvideo/HA/HALLO-A-16601.mp4",
-   "http://www.vgtc.be",
-   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
-   "https://twitter.com/VGTCentrum",
-   "https://vlaamsegebarentaal.be/signbank/",
-   "https://vlaamsegebarentaal.be/signbank/about/",
-   "https://vlaamsegebarentaal.be/signbank/about/copyright/",
-   "https://vlaamsegebarentaal.be/signbank/about/guidelines/",
-   "https://vlaamsegebarentaal.be/signbank/about/manual/",
-   "https://vlaamsegebarentaal.be/signbank/accounts/login/?next=/",
-   "https://vlaamsegebarentaal.be/signbank/feedback/",
-   "https://vlaamsegebarentaal.be/signbank/feedback/missing/",
-   "https://vlaamsegebarentaal.be/signbank/feedback/site/",
-   "https://vlaamsegebarentaal.be/signbank/files/static/bootstrap/css/bootstrap.min.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/footer.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/main.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/css/minimalistic_language_picker.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/css/style.css",
-   "https://vlaamsegebarentaal.be/signbank/files/static/images/VGT/VGTC_logo.png",
-   "https://vlaamsegebarentaal.be/signbank/files/static/images/favicon.png",
-   "https://vlaamsegebarentaal.be/signbank/files/static/js/jquery.dataTables.min.js",
-   "https://vlaamsegebarentaal.be/signbank/files/static/js/minimalistic_language_picker.js",
-   "https://vlaamsegebarentaal.be/signbank/i18n/setlang/",
-   "https://vlaamsegebarentaal.be/signbank/signs/",
-   "https://vlaamsegebarentaal.be/signbank/signs/homonyms/",
-   "https://vlaamsegebarentaal.be/signbank/signs/last_updated/",
-   "https://vlaamsegebarentaal.be/signbank/signs/search",
-   "https://vlaamsegebarentaal.be/signbank/signs/search/",
-   "https://vlaamsegebarentaal.be/signbank/signs/show_all/",
-   "https://vlaamsegebarentaal.be/signbank/signs/tags/",
-   "https://www.facebook.com/VGTCentrum/",
-   "https://www.googletagmanager.com/gtag/js?id=UA-167458804-1",
-   "https://www.instagram.com/VGTCentrum/",
-   "https://www.linkedin.com/company/vlaams-gebarentaalcentrum",
-   "mailto:info@vgtc.be"
-  ],
-  "scripts_api": [
-   "/dictionary/protected_media/glossvideo/HA/HALLO-A-16601.mp4"
-  ],
-  "snippet": "<!DOCTYPE html>\n\n\n\n\n<html>\n  <head>\n    <title>VGT Signbank</title>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link href=\"https://vlaamsegebarentaal.be/signbank/files/static/bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/css/style.css\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/footer.css\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/main.css\">\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n    <link rel=\"stylesheet\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/css/minimalistic_language_picker.css\">\n\n    <link rel=\"icon\" type=\"image/png\" href=\"https://vlaamsegebarentaal.be/signbank/files/static/images/favicon.png\">\n      <style>\n          #affix-bar.affix {\n            top:0px;\n            position:fixed;\n            z-index: 9999999;\n          }\n      </style>\n\n      <!-- Global site tag (gtag.js) - Google Analytics -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=UA-167458804-1\"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n\n  gtag('config', 'UA-167458804-1');\n</script>\n\n    \n  </head>\n  <body>\n<div st"
+  "text": " Signbank: Search Signs info@vgtc.be VGT Signbank Toggle navigation Home About Copyright Manual Guidelines for new signs Signs Search Tags Show all signs Homonym list Recently updated Feedback Site feedback Report a missing sign Login --> Aantal resultaten: 4 van 24047. Glos Annotation ID gloss: English --> Mogelijke vertalingen Variant in WDB Handedness Strong hand Weak hand Location --> Semantische veld ▲ ▼ ▲ ▼ ▲ ▼ ▲ ▼ HALLO-A --> hallo Vlaanderen Ja None None 5 Neutral space --> Communicatie HALLOWEEN-A --> halloween Vlaanderen Ja None None V Eye --> Cultuur: Evenementen HALLOWEEN-B --> halloween nog niet gekend Ja None None V Eye --> Cultuur: Evenementen HALLOWEEN-C --> halloween nog niet gekend Ja None None 5\" Neutral space --> aanvullen 1 VGTC © 2018 Dorpsstraat 43A 9052 Gent, België info@vgtc.be Wat is Vlaams GebarentaalCentrum? Vlaams GebarentaalCentrum is een kennis- en coördinatiecentrum voor de Vlaamse Gebarentaal. "
  },
- "https://vlaamsegebarentaal.be/signbank/dictionary/protected_media/glossvideo/HA/HALLO-A-16601.mp4": {
+ "https://vlaamsegebarentaal.be/signbank/signs/search/?search=hallo": {
   "status": 200,
-  "headers": {
-   "Content-Type": "video/mp4",
-   "Content-Length": "601373",
-   "Access-Control-Allow-Origin": "https://woordenboek.vlaamsegebarentaal.be"
-  },
-  "mp4": [],
-  "links": [],
-  "scripts_api": [],
-  "snippet": ""
+  "glosslinks": [
+   "/dictionary/gloss/16601/",
+   "/dictionary/gloss/17000/",
+   "/dictionary/gloss/21041/",
+   "/dictionary/gloss/4700/"
+  ],
+  "text": " Signbank: Search Signs info@vgtc.be VGT Signbank Toggle navigation Home About Copyright Manual Guidelines for new signs Signs Search Tags Show all signs Homonym list Recently updated Feedback Site feedback Report a missing sign Login --> Aantal resultaten: 4 van 24047. Glos Annotation ID gloss: English --> Mogelijke vertalingen Variant in WDB Handedness Strong hand Weak hand Location --> Semantische veld ▲ ▼ ▲ ▼ ▲ ▼ ▲ ▼ HALLO-A --> hallo Vlaanderen Ja None None 5 Neutral space --> Communicatie HALLOWEEN-A --> halloween Vlaanderen Ja None None V Eye --> Cultuur: Evenementen HALLOWEEN-B --> halloween nog niet gekend Ja None None V Eye --> Cultuur: Evenementen HALLOWEEN-C --> halloween nog niet gekend Ja None None 5\" Neutral space --> aanvullen 1 VGTC © 2018 Dorpsstraat 43A 9052 Gent, België info@vgtc.be Wat is Vlaams GebarentaalCentrum? Vlaams GebarentaalCentrum is een kennis- en coördinatiecentrum voor de Vlaamse Gebarentaal. "
+ },
+ "https://vlaamsegebarentaal.be/signbank/about/copyright/": {
+  "status": 200,
+  "glosslinks": [],
+  "text": " VGT Signbank info@vgtc.be VGT Signbank Toggle navigation Home About Copyright Manual Guidelines for new signs Signs Search Tags Show all signs Homonym list Recently updated Feedback Site feedback Report a missing sign Login --> wordt nog aan gewerkt VGTC © 2018 Dorpsstraat 43A 9052 Gent, België info@vgtc.be Wat is Vlaams GebarentaalCentrum? Vlaams GebarentaalCentrum is een kennis- en coördinatiecentrum voor de Vlaamse Gebarentaal. "
  }
 }
