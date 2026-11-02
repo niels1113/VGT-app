@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+
+
+
+<html>
+  <head>
+    <title>VGT Signbank</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://vlaamsegebarentaal.be/signbank/files/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" href="https://vlaamsegebarentaal.be/signbank/files/static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/footer.css">
+    <link rel="stylesheet" type="text/css" href="https://vlaamsegebarentaal.be/signbank/files/static/css/VGT/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://vlaamsegebarentaal.be/signbank/files/static/css/minimalistic_language_picker.css">
+
+    <link rel="icon" type="image/png" href="https://vlaamsegebarentaal.be/signbank/files/static/images/favicon.png">
+      
+
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    
+  </head>
+  <body>
+<div style="min-height:85%">
+    <div style="background-color:#C60066">
+      <div class="container">
+         <div class="pull-left">
+                <ul class="top-social-link">
+                       <li><a href="mailto:info@vgtc.be" class="top-social-icon" style="color:#EAEAEA; font-size:19px; text-decoration: None"><i class="fa fa-envelope"></i> info&#64;v&#103;t&#99;.be</a></li>
+                </ul>
+         </div>
+         <div class="pull-right">
+         <!-- button toggle top sozial -->
+              <ul class="top-social-link">
+                      <li><a target="_blank" href="https://www.facebook.com/VGTCentrum/" class="top-social-icon" style="color:#EAEAEA; font-size:20px"><i class="fa fa-facebook"></i></a></li>
+                      <li><a target="_blank" href="https://twitter.com/VGTCentrum" class="top-social-icon" style="color:#EAEAEA; font-size:20px"><i	class="fa fa-twitter"></i></a></li>
+                      <li><a target="_blank" href="https://www.linkedin.com/company/vlaams-gebarentaalcentrum" class="top-social-icon" style="color:#EAEAEA; font-size:20px"><i class="fa fa-linkedin"></i></a></li>
+                      <li><a target="_blank" href="https://www.instagram.com/VGTCentrum/" class="top-social-icon" style="color:#EAEAEA; font-size:20px"><i class="fa fa-instagram"></i></a></li>
+              </ul>
+          </div>
+      <!-- .imd-top-social -->
+    </div>
+  </div>
+  <div style="background-color:#4362AD">
+    <div class="container">
+
+        <div id="leftcontentborder"></div>
+        <div id="rightcontentborder"></div>
+
+        <div id='header'>
+          <h1>VGT Signbank</h1>
+            <div id='logoholder' class="pull-right"></div>
+        </div>
+      </div>
+  </div>
+    <div id='wrap'>
+        <div class="container">
+        
+
+<div id="affix-bar">
+<nav id='navbar' class="navbar navbar-default" role="navigation">
+
+  <!-- Brand and toggle get grouped for better mobile display -->
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle hamburger_button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+  </div>
+
+
+  <!-- Collect the nav links, forms, and other content for toggling -->
+  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+    <ul class="nav navbar-nav">
+    
+    
+
+        
+        <li><a href="https://vlaamsegebarentaal.be/signbank/">
+            
+                 Home
+             	
+        </a></li>
+      
+    
+
+        
+        <li class='dropdown'>
+             <a href="https://vlaamsegebarentaal.be/signbank/about/"  class="dropdown-toggle" data-toggle="dropdown">
+             	
+                 About
+             	
+                 <b class="caret"></b></a>
+             <ul class="dropdown-menu">
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/about/copyright/">
+             	
+                 Copyright
+             	
+                </a></li>
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/about/manual/">
+             	
+                 Manual
+             	
+                </a></li>
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/about/guidelines/">
+             	
+                 Guidelines for new signs
+             	
+                </a></li>
+             
+             </ul>
+        </li>
+      
+    
+
+        
+        <li class='dropdown'>
+             <a href="https://vlaamsegebarentaal.be/signbank/signs/"  class="dropdown-toggle" data-toggle="dropdown">
+             	
+                 Signs
+             	
+                 <b class="caret"></b></a>
+             <ul class="dropdown-menu">
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/signs/search/">
+             	
+                 Search
+             	
+                </a></li>
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/signs/tags/">
+             	
+                 Tags
+             	
+                </a></li>
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/signs/show_all/">
+             	
+                 Show all signs
+             	
+                </a></li>
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/signs/homonyms/">
+             	
+                 Homonym list
+             	
+                </a></li>
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/signs/last_updated/">
+             	
+                 Recently updated
+             	
+                </a></li>
+             
+             </ul>
+        </li>
+      
+    
+
+        
+        <li class='dropdown'>
+             <a href="https://vlaamsegebarentaal.be/signbank/feedback/"  class="dropdown-toggle" data-toggle="dropdown">
+             	
+                 Feedback
+             	
+                 <b class="caret"></b></a>
+             <ul class="dropdown-menu">
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/feedback/site/">
+             	
+                 Site feedback
+             	
+                </a></li>
+             
+                <li ><a href="https://vlaamsegebarentaal.be/signbank/feedback/missing/">
+             	
+                 Report a missing sign
+             	
+                </a></li>
+             
+             </ul>
+        </li>
+      
+    
+
+    </ul>
+    <form class="navbar-form navbar-right" role="search" id="frmSearch" name="frmSearch" method="get" action="https://vlaamsegebarentaal.be/signbank/signs/search">
+
+          <input class='form-control' placeholder='Glos of vertaling' type="Text" name="search" value="" maxlength="50">
+       <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+    </form>
+
+    <ul class='nav navbar-nav navbar-right'>
+    
+       <li><a href="https://vlaamsegebarentaal.be/signbank/accounts/login/?next=/">Login</a></li>
+    
+    </ul>
+
+  </div><!-- /.navbar-collapse -->
+</nav>
+
+<!-- <div id="minimalistic_language_picker"></div> -->
+</div>
+
+
+        
+
+
+
+        <div role='main' id="maincontent">
+        
+
+
+<div id='publicsign'>
+    
+
+    <div id="signinfo" class='navbar navbar-default navbar-collapse'>
+    
+        <div class='btn-group'>
+            
+           
+             
+        </div>
+   
+   
+        <div class='pull-right'>
+            
+                
+            
+        </div>
+    
+    
+        
+    
+    </div>
+
+    <div id="definitionblock">
+        <div class='col-md-4'>
+            <div id="videocontainer" style="width: 700px; height: 366px;">
+               <div id="player" style="width: 700px;">
+                
+                  <iframe id='videoiframe' class="larger_iframe" scrolling="no" frameborder='0' style="width: 635px; height: 358px;"
+                          src="/dictionary/protected_media/glossvideo/HA/HALLO-A-16601.mp4">
+                  </iframe>
+                
+               </div>
+               <div id="replay"></div>
+            </div>
+        
+        
+            <div id="keywords">
+                
+                 <p><strong>Translation equivalents:</strong>
+                 
+                   hallo
+                 
+                 </p>
+            </div>
+            
+            
+            <div>
+                
+                <h4>Sign Distribution</h4>
+                <ul>
+                    
+                      <li>Vlaanderen</li>
+                    
+                </ul>
+            </div>
+            
+        </div>
+
+        
+    
+    </div>
+
+</div>
+
+
+        </div>
+
+        </div>
+    </div>
+  </div>
+
+  <footer class="footer-distributed">
+    <div class="container">
+
+    <div class="footer-left">
+      <img src="https://vlaamsegebarentaal.be/signbank/files/static/images/VGT/VGTC_logo.png"/>
+      <p class="footer-copyright">VGTC &copy; 2018</p>
+    </div>
+
+    <div class="footer-center">
+
+      <div>
+        <i class="fa fa-map-marker"></i>
+        <p><span>Dorpsstraat 43A</span>9052 Gent, België</p>
+      </div>
+
+      <div>
+        <i class="fa fa-envelope"></i>
+        <p><a href="mailto:info@vgtc.be">info@vgtc.be</a></p>
+      </div>
+
+    </div>
+
+    <div class="footer-right">
+
+      <p class="footer-about">
+        <span>Wat is Vlaams GebarentaalCentrum?</span>
+        Vlaams GebarentaalCentrum is een kennis- en coördinatiecentrum voor de Vlaamse Gebarentaal.
+      </p>
+
+      <div class="footer-icons">
+
+        <a href="https://www.facebook.com/VGTCentrum/"><i class="fa fa-facebook"></i></a>
+        <a href="https://twitter.com/VGTCentrum"><i class="fa fa-twitter"></i></a>
+        <a href="https://www.linkedin.com/company/vlaams-gebarentaalcentrum"><i class="fa fa-linkedin"></i></a>
+        <a href="https://www.instagram.com/VGTCentrum/"><i class="fa fa-instagram"></i></a>
+        <a href="http://www.vgtc.be"><i class="fa fa-globe"></i></a>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  </footer>
+
+
+
+    
+    
+    
+
+    <!-- DataTables -->
+    
+
+    
+
+    
+
+    <!-- The following script should be in the menu template,
+         but since Django is not able to use an extrajs block
+         from an include template, it is put here. -->
+    
+
+    <form id="change_language_form" method="post" action="https://vlaamsegebarentaal.be/signbank/i18n/setlang/">
+        <input type='hidden' name='csrfmiddlewaretoken' value='iwX7eh6fW5zrAmmOPOepA2l9jXShdkvIkIvhm3f9tMk6vFNInXqW9yDu6FEttphK' />
+        <input id="change_language_input_field" type="hidden" name="language" value="">
+
+    </form>
+
+  </body>
+</html>
