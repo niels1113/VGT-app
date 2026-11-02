@@ -77,6 +77,16 @@ def score(word, row):
     return sc
 
 
+# Andere zoektermen voor woorden die de Signbank anders noteert
+ALIASES = {
+    "dank je": ["dank", "bedanken", "dank u"],
+    "alsjeblieft": ["alstublieft", "a.u.b.", "aub"],
+    "oké": ["ok", "oke", "okay", "in orde"],
+    "naar huis": ["huis", "naar huis gaan"],
+    "ik hou van jou": ["houden van", "graag zien", "liefde"],
+}
+
+
 def video_url(gid):
     page = get(f"{BASE}/dictionary/gloss/{gid}/")
     m = re.search(r'(/dictionary/protected_media/glossvideo/[^"\']+?\.mp4)', page)
@@ -162,13 +172,17 @@ def main():
             report["gevonden"].append(w)
             continue
         try:
-            rows = search(w)
-            if not rows:
-                report["niet_gevonden"].append({"woord": w, "kandidaten": []})
-                continue
-            best = max(rows, key=lambda r: score(w, r))
-            if score(w, best) < 10:
-                report["niet_gevonden"].append({"woord": w, "kandidaten": [r["gloss"] for r in rows[:6]]})
+            best, cands = None, []
+            for term in [w] + ALIASES.get(w, []):
+                rows = search(term)
+                cands += [r["gloss"] for r in rows[:4]]
+                if rows:
+                    b = max(rows, key=lambda r: score(term, r))
+                    if score(term, b) >= 10:
+                        best = b
+                        break
+            if not best:
+                report["niet_gevonden"].append({"woord": w, "kandidaten": cands[:10]})
                 continue
             url = video_url(best["id"])
             if not url:
