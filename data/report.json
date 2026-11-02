@@ -1,0 +1,87 @@
+{
+ "gevonden": [
+  "hallo",
+  "goedemorgen",
+  "goedenavond",
+  "tot ziens",
+  "sorry",
+  "ja",
+  "nee",
+  "wie",
+  "wat",
+  "waar",
+  "wanneer",
+  "waarom",
+  "hoe",
+  "hoeveel",
+  "mama",
+  "papa",
+  "broer",
+  "zus",
+  "kind",
+  "baby",
+  "opa",
+  "oma",
+  "vriend",
+  "blij",
+  "verdrietig",
+  "boos",
+  "bang",
+  "moe",
+  "verliefd",
+  "ziek",
+  "goed",
+  "eten",
+  "drinken",
+  "honger",
+  "dorst",
+  "water",
+  "koffie",
+  "brood",
+  "lekker",
+  "vandaag",
+  "morgen",
+  "gisteren",
+  "nu",
+  "later",
+  "maandag",
+  "dinsdag",
+  "woensdag",
+  "donderdag",
+  "vrijdag",
+  "zaterdag",
+  "zondag",
+  "toilet",
+  "bier",
+  "dansen",
+  "buiten",
+  "wachten",
+  "mooi",
+  "muziek"
+ ],
+ "niet_gevonden": [
+  {
+   "woord": "dank je",
+   "kandidaten": []
+  },
+  {
+   "woord": "alsjeblieft",
+   "kandidaten": []
+  },
+  {
+   "woord": "oké",
+   "kandidaten": [
+    "POKEMON-A"
+   ]
+  },
+  {
+   "woord": "naar huis",
+   "kandidaten": []
+  },
+  {
+   "woord": "ik hou van jou",
+   "kandidaten": []
+  }
+ ],
+ "fouten": []
+}
