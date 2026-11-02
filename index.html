@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Handig – leer Vlaamse Gebarentaal</title>
+<meta name="theme-color" content="#58cc02">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--green:#58cc02;--green-d:#46a302;--blue:#1cb0f6;--blue-d:#1899d6;--red:#ff4b4b;--red-d:#ea2b2b;--gold:#ffc800;--gold-d:#e5a500;--ink:#3c3c3c;--muted:#8a8a8a;--line:#e5e5e5;--soft:#f7f7f7;--okbg:#d7ffb8;--badbg:#ffdfe0;--mehbg:#fff3d6}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#fff;color:var(--ink);font-family:Nunito,system-ui,sans-serif;font-weight:700}
+button{font-family:inherit;font-weight:800;cursor:pointer}
+a{color:var(--blue)}
+#app{max-width:560px;margin:0 auto;min-height:100vh;padding-bottom:84px}
+.top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:2px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:12px 18px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:20px;color:var(--green)}
+.stats{display:flex;gap:16px;font-weight:900;font-size:16px}
+.stats span{display:flex;align-items:center;gap:4px}
+.s-fire{color:#ff9600}.s-xp{color:var(--gold-d)}.s-heart{color:var(--red)}
+.dim{filter:grayscale(1);opacity:.5}
+.goal{margin:16px 18px 4px;border:2px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.goal .bar{flex:1;height:14px;background:var(--line);border-radius:10px;overflow:hidden}
+.goal .bar div{height:100%;background:var(--gold);border-radius:10px;transition:width .4s}
+.goal small{color:var(--muted)}
+.unit{margin:22px 18px 8px}
+.unit-head{border-radius:16px;color:#fff;padding:14px 18px;box-shadow:0 4px 0 var(--cd)}
+.unit-head small{opacity:.85;font-weight:900;letter-spacing:.06em}
+.unit-head h2{margin:2px 0 2px;font-size:21px;font-weight:900}
+.unit-head p{margin:0;opacity:.95;font-size:15px}
+.path{display:flex;flex-direction:column;align-items:center;gap:18px;padding:52px 0 8px}
+.nodewrap{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
+.node{width:74px;height:68px;border-radius:50%;border:none;font-size:30px;background:var(--c);box-shadow:0 7px 0 var(--cd);color:#fff;transition:transform .08s,box-shadow .08s}
+.node:active{transform:translateY(5px);box-shadow:0 2px 0 var(--cd)}
+.node.locked{background:#e5e5e5;box-shadow:0 7px 0 #c9c9c9;filter:grayscale(1)}
+.node.done{background:var(--gold);box-shadow:0 7px 0 var(--gold-d)}
+.node.current{outline:6px solid color-mix(in srgb,var(--c) 25%,transparent);outline-offset:6px}
+.nlabel{font-size:13px;color:var(--muted);max-width:120px;text-align:center}
+.startbub{position:absolute;top:-38px;background:#fff;border:2px solid var(--line);color:var(--c);font-weight:900;padding:5px 12px;border-radius:12px;font-size:14px;animation:bob 1.4s ease-in-out infinite;white-space:nowrap}
+.startbub:after{content:"";position:absolute;left:50%;bottom:-8px;width:12px;height:12px;background:#fff;border-right:2px solid var(--line);border-bottom:2px solid var(--line);transform:translateX(-50%) rotate(45deg)}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid var(--line);display:flex;justify-content:center;z-index:6}
+.nav div{display:flex;max-width:560px;width:100%}
+.nav button{flex:1;background:none;border:none;padding:10px 0 14px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px}
+.nav button b{font-size:24px}
+.nav button.on{color:var(--blue)}
+.nav button.on b{transform:scale(1.1)}
+.btn{display:block;width:100%;border:none;border-radius:16px;padding:14px;font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--green);box-shadow:0 4px 0 var(--green-d);transition:transform .06s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--green-d)}
+.btn.blue{background:var(--blue);box-shadow:0 4px 0 var(--blue-d)}
+.btn.red{background:var(--red);box-shadow:0 4px 0 var(--red-d)}
+.btn.ghost{background:#fff;color:var(--blue);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.gold{background:var(--gold);box-shadow:0 4px 0 var(--gold-d)}
+.btn:disabled{background:#e5e5e5;color:#afafaf;box-shadow:0 4px 0 #d0d0d0;cursor:default}
+.row{display:flex;gap:12px}.row .btn{flex:1}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fade .15s}
+.sheet{background:#fff;width:100%;max-width:560px;border-radius:22px 22px 0 0;padding:22px 20px 26px;animation:up .2s ease-out}
+.sheet h3{margin:0 0 4px;font-size:22px;font-weight:900}
+.sheet p{margin:0 0 18px;color:var(--muted)}
+.modal{align-items:center}.modal .sheet{border-radius:22px;margin:0 18px}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+@keyframes fade{from{opacity:0}}
+.pad{padding:18px}
+h1.t{font-size:24px;font-weight:900;margin:6px 0 6px}
+.muted{color:var(--muted)}
+.card{border:2px solid var(--line);border-radius:16px;padding:16px;margin:14px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{border:2px solid var(--line);border-radius:16px;padding:12px 14px}
+.stat b{display:block;font-size:22px;font-weight:900}
+.stat small{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{border:2px solid var(--line);border-radius:12px;padding:6px 10px;font-size:14px;text-decoration:none;color:var(--ink);box-shadow:0 2px 0 var(--line)}
+.chip.ok{border-color:#a5ed6e;background:#f1ffe6}.chip.weak{border-color:#ffc1c1;background:#fff3f3}.chip.new{color:#aaa}
+/* lesson */
+.lesson{position:fixed;inset:0;background:#fff;z-index:10;display:flex;flex-direction:column}
+.lesson>*{width:100%;max-width:560px;margin:0 auto}
+.lhead{display:flex;align-items:center;gap:14px;padding:16px 18px}
+.x{background:none;border:none;font-size:24px;color:#afafaf;padding:0 4px}
+.pbar{flex:1;height:16px;background:var(--line);border-radius:10px;overflow:hidden}
+.pbar div{height:100%;background:var(--green);border-radius:10px;transition:width .35s;position:relative}
+.pbar div:after{content:"";position:absolute;left:8px;right:8px;top:4px;height:4px;border-radius:4px;background:rgba(255,255,255,.35)}
+.lh{font-weight:900;color:var(--red);font-size:17px}
+.lbody{flex:1;overflow:auto;padding:8px 20px 20px}
+.lbody h2{font-size:22px;font-weight:900;margin:8px 0 18px;line-height:1.3}
+.tag{display:inline-block;font-size:13px;font-weight:900;color:#ce82ff;letter-spacing:.05em;text-transform:uppercase;margin-top:6px}
+.opts{display:flex;flex-direction:column;gap:12px}
+.opt{text-align:left;background:#fff;border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:14px 16px;font-size:16px;color:var(--ink)}
+.opt.sel{border-color:#84d8ff;background:#ddf4ff;color:var(--blue-d)}
+.opt.right{border-color:#a5ed6e;background:var(--okbg);color:var(--green-d)}
+.opt.wrong{border-color:#ffb2b2;background:var(--badbg);color:var(--red-d)}
+.opt:disabled{cursor:default}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mcol{display:flex;flex-direction:column;gap:12px}
+.mcol .opt{font-size:15px;min-height:58px;text-align:center}
+.opt.gone{opacity:.35;background:var(--soft)}
+.opt.flash{animation:shake .35s;border-color:#ffb2b2;background:var(--badbg)}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.wordcard{border:2px solid var(--line);border-bottom-width:5px;border-radius:20px;padding:26px 18px;text-align:center}
+.wordcard .emo{font-size:64px;line-height:1}
+.wordcard .w{font-size:32px;font-weight:900;margin:10px 0 4px}
+.dictbtn{display:flex;align-items:center;justify-content:center;gap:8px;margin:18px 0 0;text-decoration:none;border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:13px;color:var(--blue);font-weight:900}
+.tips{margin-top:16px;background:var(--soft);border-radius:14px;padding:12px 14px;font-size:14px;color:#666;line-height:1.5}
+.lfoot{border-top:2px solid var(--line);padding:16px 20px 22px;max-width:none!important}
+.lfoot>div{max-width:520px;margin:0 auto}
+.lfoot.ok{background:var(--okbg);border-color:transparent}
+.lfoot.bad{background:var(--badbg);border-color:transparent}
+.lfoot.meh{background:var(--mehbg);border-color:transparent}
+.fb{margin-bottom:14px}
+.fb>b{font-size:20px;font-weight:900;display:block}
+.lfoot.ok .fb>b{color:var(--green-d)}.lfoot.bad .fb>b{color:var(--red-d)}.lfoot.meh .fb>b{color:#c47f00}
+.fb p{margin:4px 0 0;font-size:15px;line-height:1.45}
+.lfoot.ok .fb p{color:#3d8a00}.lfoot.bad .fb p{color:#c43030}.lfoot.meh .fb p{color:#8a6000}
+.center{text-align:center}
+.finish{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1;padding:20px}
+.finish h2{color:var(--gold-d);font-size:28px;font-weight:900;margin:14px 0 18px}
+.fstats{display:flex;gap:12px;width:100%;max-width:400px}
+.fstat{flex:1;border:2px solid var(--fc);border-radius:16px;overflow:hidden}
+.fstat small{display:block;background:var(--fc);color:#fff;font-weight:900;font-size:12px;padding:4px;text-transform:uppercase}
+.fstat b{display:block;padding:12px 4px;font-size:20px;color:var(--fc);font-weight:900}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:11}
+.confetti i{position:absolute;top:-20px;width:10px;height:14px;border-radius:3px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.mascot{animation:wave 2s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes wave{0%,100%{transform:rotate(0)}20%{transform:rotate(-8deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-4deg)}}
+.info{font-size:14px;line-height:1.5;color:#666}
+.sv{width:100%;max-height:36vh;border-radius:18px;background:#111;display:block;object-fit:contain}
+.vwrap{position:relative}
+.speedbtn{position:absolute;right:10px;bottom:10px;border:none;border-radius:10px;background:rgba(0,0,0,.6);color:#fff;font-size:13px;padding:6px 10px}
+.wordhead{text-align:center;font-size:28px;font-weight:900;margin:0 0 12px}
+.vrow{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:2px solid var(--soft)}
+.vrow:last-child{border-bottom:none}
+.vrow span{flex:1}
+.vrow .ok{color:var(--green-d);font-size:13px}
+.mini{border:2px solid var(--line);border-bottom-width:3px;border-radius:10px;padding:6px 10px;font-size:13px;color:var(--blue);background:#fff;cursor:pointer;white-space:nowrap}
+.mini input{display:none}
+
+.screen{position:fixed;inset:0;background:#fff;z-index:40;display:flex;flex-direction:column}
+.screen>*{width:100%;max-width:620px;margin-left:auto;margin-right:auto}
+.shead{display:flex;align-items:center;gap:10px;padding:12px 14px;padding-top:max(12px,env(safe-area-inset-top))}
+.shead h2{flex:1;margin:0;font-size:20px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sbody{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding:0 14px}
+.vbox{position:relative;border-radius:16px;overflow:hidden;background:#111;flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.vbox>video{max-width:100%;max-height:100%;display:block}
+.vstack{position:relative;max-width:100%;max-height:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.vstack video{width:100%;height:100%;object-fit:contain}
+.vstack canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mirror{transform:scaleX(-1)}
+.vlabel{position:absolute;left:10px;top:10px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 8px;border-radius:8px;z-index:2}
+.vtools{position:absolute;right:8px;top:8px;display:flex;gap:6px;z-index:2}
+.vtools button{background:rgba(0,0,0,.55);color:#fff;border:none;border-radius:8px;font-size:12px;padding:5px 8px}
+.handok{position:absolute;left:10px;bottom:10px;z-index:2;font-size:12px;padding:3px 8px;border-radius:8px;background:rgba(0,0,0,.55);color:#fff}
+.count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:110px;font-weight:900;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.5);z-index:3;pointer-events:none}
+.recdot{position:absolute;right:10px;bottom:10px;z-index:3;background:var(--red);color:#fff;font-size:12px;border-radius:8px;padding:3px 8px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.5}}
+.rbar{position:absolute;left:0;bottom:0;height:5px;background:var(--red);z-index:3;transition:width .1s linear}
+.sfoot{padding:12px 14px calc(14px + env(safe-area-inset-bottom))}
+.result{text-align:center}
+.score{font-size:46px;font-weight:900;line-height:1}
+.verdict{font-size:20px;font-weight:900;margin:4px 0 10px}
+.bars{display:grid;gap:7px;text-align:left;margin:8px 0 10px}
+.bar{display:grid;grid-template-columns:86px 1fr 38px;align-items:center;gap:8px;font-size:14px}
+.bar .tr{height:12px;border-radius:8px;background:var(--line);overflow:hidden}
+.bar .tr div{height:100%;border-radius:8px}
+.tip{background:var(--soft);border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.45;text-align:left;margin-bottom:12px}
+.prog{height:14px;background:var(--line);border-radius:10px;overflow:hidden;margin:14px 0 6px}
+.prog div{height:100%;background:var(--green);transition:width .2s}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0}
+.setrow select{font-size:15px;border:2px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff;color:var(--ink);font-family:inherit;font-weight:800}
+.switch{width:52px;height:30px;border-radius:20px;border:none;background:#ddd;position:relative;flex:none}
+.switch:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .15s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.switch.on{background:var(--green)}.switch.on:after{left:25px}
+input.txt{width:100%;font-size:15px;border:2px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--soft);color:var(--ink);outline:none;font-family:inherit;font-weight:700}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#3c3c3c;color:#fff;padding:10px 16px;border-radius:12px;z-index:60;font-size:14px;max-width:90vw;text-align:center}
+.pill{font-size:12px;border-radius:20px;padding:4px 9px;border:2px solid var(--line);white-space:nowrap}
+.pill.ok{color:var(--green-d);border-color:#a5ed6e;background:#f1ffe6}.pill.wait{color:#c47f00;border-color:#ffe08a;background:#fffaeb}.pill.err{color:var(--red-d);border-color:#ffb2b2;background:#fff3f3}
+label.btn{cursor:pointer;text-align:center}label.btn input{display:none}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="layer"></div>
+<script>
+const DICT = "https://woordenboek.vlaamsegebarentaal.be/";
+const GOAL = 30;
+
+const UNITS = [
+ {id:"u1",title:"Eerste stappen",desc:"Wat is Vlaamse Gebarentaal eigenlijk?",c:"#58cc02",cd:"#46a302",lessons:[
+  {id:"u1l1",title:"Wat is VGT?",type:"quiz",q:[
+   {t:"mc",p:"Wanneer erkende het Vlaams Parlement Vlaamse Gebarentaal officieel?",o:["1996","2006","2016","2021"],a:"2006",e:"VGT werd erkend bij decreet van 26 april 2006."},
+   {t:"tf",p:"Gebarentaal is overal ter wereld hetzelfde.",a:false,e:"Elk land (en soms elke regio) heeft een eigen gebarentaal. VGT is iets anders dan bv. Nederlandse of Amerikaanse gebarentaal."},
+   {t:"mc",p:"Welke gebarentaal gebruiken Dove mensen in Wallonië?",o:["VGT","LSFB","NGT","ASL"],a:"LSFB",e:"LSFB = Langue des Signes de Belgique Francophone. België heeft dus twee gebarentalen."},
+   {t:"tf",p:"VGT is een volwaardige taal met een eigen grammatica, los van het Nederlands.",a:true,e:"VGT is geen 'Nederlands met gebaren', maar een taal met een eigen woordenschat en zinsbouw."},
+   {t:"match",p:"Koppel de afkortingen",pairs:[["VGT","Vlaamse Gebarentaal"],["NGT","Nederlandse Gebarentaal"],["LSFB","Franstalige Belgische gebarentaal"],["VGTC","Vlaams GebarentaalCentrum"]]},
+   {t:"tf",p:"Binnen VGT bestaan regionale varianten van gebaren.",a:true,e:"Net als dialecten. Die variatie hangt vooral samen met de vroegere dovenscholen in de verschillende provincies."},
+   {t:"mc",p:"Waar bekijk je betrouwbare video's van VGT-gebaren?",o:["Het online Woordenboek VGT","Van Dale","Google Translate","Een emoji-lijst"],a:"Het online Woordenboek VGT",e:"Het Woordenboek Vlaamse Gebarentaal van het VGTC bevat meer dan 10.000 gebaren op video."}
+  ]},
+  {id:"u1l2",title:"Dove cultuur",type:"quiz",q:[
+   {t:"mc",p:"Wat betekent 'Doof' met een hoofdletter D?",o:["Iemand die zich deel voelt van de Dove gemeenschap en cultuur","Iemand die volledig niets hoort","Een medische diagnose","Een spelfout"],a:"Iemand die zich deel voelt van de Dove gemeenschap en cultuur",e:"Met een hoofdletter verwijst 'Doof' naar een culturele en taalkundige identiteit, niet naar een medische toestand."},
+   {t:"mc",p:"Hoe trek je beleefd de aandacht van een Doof persoon?",o:["Zacht op de schouder tikken","Heel luid roepen","Achter de persoon in je handen klappen","Aan de arm trekken"],a:"Zacht op de schouder tikken",e:"Ook zwaaien binnen iemands blikveld werkt goed."},
+   {t:"tf",p:"Een naamgebaar kies je meestal zelf.",a:false,e:"Je krijgt een naamgebaar doorgaans van Dove mensen, vaak op basis van een kenmerk van jou."},
+   {t:"mc",p:"Wanneer is de Internationale Dag van de Gebarentalen?",o:["23 september","14 februari","1 mei","10 december"],a:"23 september",e:"Die dag werd door de Verenigde Naties uitgeroepen."},
+   {t:"tf",p:"In een gesprek in VGT is oogcontact heel belangrijk.",a:true,e:"Wegkijken is in gebarentaal een beetje zoals iemand onderbreken of niet luisteren."},
+   {t:"mc",p:"Waarvoor gebruik je het handalfabet (vingerspellen) vooral?",o:["Namen en woorden zonder bekend gebaar","Elk woord in een zin","Alleen voor getallen","Om te groeten"],a:"Namen en woorden zonder bekend gebaar",e:"Vingerspellen is handig voor namen, plaatsen en nieuwe termen. Voor gewone woorden gebruik je het gebaar."}
+  ]}
+ ]},
+ {id:"u2",title:"Groeten",desc:"Je allereerste gebaren",c:"#1cb0f6",cd:"#1899d6",lessons:[
+  {id:"u2l1",title:"Hallo!",type:"vocab",w:[["hallo","👋"],["goedemorgen","🌅"],["goedenavond","🌙"],["tot ziens","🚪"]]},
+  {id:"u2l2",title:"Beleefd zijn",type:"vocab",w:[["dank je","🙏"],["alsjeblieft","🤲"],["sorry","😔"],["ja","👍"],["nee","👎"]]}
+ ]},
+ {id:"u3",title:"Bouwstenen",desc:"Hoe zit een gebaar in elkaar?",c:"#ce82ff",cd:"#a568cc",lessons:[
+  {id:"u3l1",title:"Vijf parameters",type:"quiz",q:[
+   {t:"match",p:"Koppel elk onderdeel van een gebaar",pairs:[["Handvorm","De vorm van je hand"],["Plaats","Waar je het gebaar maakt"],["Beweging","Hoe je hand beweegt"],["Oriëntatie","Richting van handpalm en vingers"]]},
+   {t:"tf",p:"Mimiek is in VGT enkel versiering en heeft geen grammaticale functie.",a:false,e:"Mimiek (gezicht, mond, hoofd, schouders) draagt betekenis en grammatica, bijvoorbeeld om een vraag te markeren."},
+   {t:"mc",p:"Twee gebaren hebben dezelfde handvorm, plaats en beweging, maar een andere oriëntatie. Kunnen ze iets anders betekenen?",o:["Ja","Nee, dat is altijd hetzelfde gebaar"],a:"Ja",e:"Eén parameter veranderen kan een ander gebaar opleveren, zoals één letter in 'kat' en 'kot'."},
+   {t:"mc",p:"Wat is je 'dominante hand'?",o:["De hand die het meeste werk doet, meestal je schrijfhand","Altijd je rechterhand","De hand die stil blijft","De hand die het dichtst bij je gezicht is"],a:"De hand die het meeste werk doet, meestal je schrijfhand",e:"Bij gebaren met één hand gebruik je je dominante hand."},
+   {t:"tf",p:"Linkshandigen maken gebaren meestal gespiegeld, met links als dominante hand.",a:true,e:"Dat is volkomen normaal. Belangrijk is dat je consequent dezelfde hand gebruikt."},
+   {t:"mc",p:"In veel gebarentalen, ook VGT, markeer je een ja/nee-vraag vaak met...",o:["Opgetrokken wenkbrauwen","Gesloten ogen","Een knipoog","Je tong uitsteken"],a:"Opgetrokken wenkbrauwen",e:"Zo zie je aan het gezicht dat het om een vraag gaat. Let in de woordenboekvideo's altijd op het gezicht."}
+  ]}
+ ]},
+ {id:"u4",title:"Vragen stellen",desc:"Wie, wat, waar…?",c:"#ff9600",cd:"#cc7800",lessons:[
+  {id:"u4l1",title:"Vraagwoorden 1",type:"vocab",w:[["wie","🧑"],["wat","❓"],["waar","📍"],["wanneer","🕒"]]},
+  {id:"u4l2",title:"Vraagwoorden 2",type:"vocab",w:[["waarom","🤔"],["hoe","🛠️"],["hoeveel","🔢"]]}
+ ]},
+ {id:"u5",title:"Familie",desc:"Over de mensen rond jou",c:"#ff86d0",cd:"#d96aae",lessons:[
+  {id:"u5l1",title:"Gezin",type:"vocab",w:[["mama","👩"],["papa","👨"],["broer","👦"],["zus","👧"]]},
+  {id:"u5l2",title:"Familie & vrienden",type:"vocab",w:[["kind","🧒"],["baby","👶"],["opa","👴"],["oma","👵"],["vriend","🤝"]]}
+ ]},
+ {id:"u6",title:"Gevoelens",desc:"Zeg hoe je je voelt",c:"#00cd9c",cd:"#00a47d",lessons:[
+  {id:"u6l1",title:"Hoe gaat het?",type:"vocab",w:[["blij","😄"],["verdrietig","😢"],["boos","😠"],["bang","😨"]]},
+  {id:"u6l2",title:"Meer gevoelens",type:"vocab",w:[["moe","🥱"],["verliefd","😍"],["ziek","🤒"],["goed","🙂"]]}
+ ]},
+ {id:"u7",title:"Eten & drinken",desc:"Aan tafel",c:"#ff4b4b",cd:"#ea2b2b",lessons:[
+  {id:"u7l1",title:"Honger!",type:"vocab",w:[["eten","🍽️"],["drinken","🥤"],["honger","😋"],["dorst","💧"]]},
+  {id:"u7l2",title:"Op tafel",type:"vocab",w:[["water","🚰"],["koffie","☕"],["brood","🍞"],["lekker","😋"]]}
+ ]},
+ {id:"u8",title:"Tijd",desc:"Vandaag, morgen en de week",c:"#1cb0f6",cd:"#1899d6",lessons:[
+  {id:"u8l1",title:"Wanneer?",type:"vocab",w:[["vandaag","📅"],["morgen","➡️"],["gisteren","⬅️"],["nu","⏱️"],["later","⏳"]]},
+  {id:"u8l2",title:"Weekdagen",type:"vocab",w:[["maandag","1️⃣"],["dinsdag","2️⃣"],["woensdag","3️⃣"],["donderdag","4️⃣"],["vrijdag","5️⃣"],["zaterdag","6️⃣"],["zondag","7️⃣"]]}
+ ]},
+ {id:"u10",title:"Uitgaan",desc:"Praten als de muziek te luid staat",c:"#ce82ff",cd:"#a568cc",lessons:[
+  {id:"u10l1",title:"Op café",type:"vocab",w:[["toilet","🚻"],["bier","🍺"],["dansen","💃"],["buiten","🌙"],["wachten","⏳"]]},
+  {id:"u10l2",title:"Samen weg",type:"vocab",w:[["oké","👌"],["mooi","✨"],["muziek","🎵"],["naar huis","🏠"],["ik hou van jou","❤️"]]}
+ ]},
+ {id:"u9",title:"Samen praten",desc:"Communiceren met Dove mensen",c:"#58cc02",cd:"#46a302",lessons:[
+  {id:"u9l1",title:"Goede gewoontes",type:"quiz",q:[
+   {t:"tf",p:"Praat je met een Doof persoon via een tolk, dan kijk en spreek je best naar de tolk.",a:false,e:"Richt je tot de Dove persoon zelf. De tolk vertaalt alleen."},
+   {t:"mc",p:"Iemand leest je lippen. Wat helpt het meest?",o:["Rustig en duidelijk praten, met je gezicht zichtbaar","Overdreven articuleren en roepen","Je mond bedekken","Snel praten en wegkijken"],a:"Rustig en duidelijk praten, met je gezicht zichtbaar",e:"Overdrijven maakt liplezen juist moeilijker. Zorg ook dat er geen tegenlicht op je gezicht valt."},
+   {t:"tf",p:"Een gesprek in VGT loopt het best met goed licht en vrij zicht op elkaar.",a:true,e:"Gebarentaal is visueel: schaduw of tegenlicht maakt alles moeilijker te volgen."},
+   {t:"mc",p:"Hoe vraag je de aandacht van een hele groep Dove mensen tegelijk?",o:["Het licht even aan en uit doen","Op de tafel kloppen tot iedereen kijkt","Een fluitje gebruiken","Wachten tot iemand toevallig kijkt"],a:"Het licht even aan en uit doen",e:"Zwaaien werkt ook. Op een tafel kloppen kan soms, omdat je de trilling voelt, maar het licht is duidelijker."},
+   {t:"mc",p:"Je begrijpt een gebaar niet. Wat doe je?",o:["Vragen om het te herhalen of te vingerspellen","Knikken alsof je het begreep","Het gesprek stoppen","Een ander onderwerp aansnijden"],a:"Vragen om het te herhalen of te vingerspellen",e:"Doen alsof je het snapt leidt tot misverstanden. Vragen wordt meestal juist gewaardeerd."},
+   {t:"tf",p:"Gebarentaal leer je het best ook van en met Dove mensen zelf.",a:true,e:"Een app helpt met woordenschat, maar een cursus en gesprekken met Dove gebaarders zijn onmisbaar."}
+  ]}
+ ]}
+];
+
+const ALL = UNITS.flatMap(u => u.lessons.map(l => Object.assign(l, {unit:u})));
+const WORDS = {}; UNITS.forEach(u => u.lessons.forEach(l => (l.w||[]).forEach(([w,e]) => WORDS[w] = {w,e,unit:u.title})));
+
+const KEY = "handig-vgt-v1";
+let S = load(), tab = "learn", L = null;
+
+function load(){
+  const d = {xp:0,streak:0,lastDay:null,hearts:5,heartsDay:null,done:{},words:{},xpDay:{}};
+  try{ const r = localStorage.getItem(KEY); if(r) Object.assign(d, JSON.parse(r)); }catch(e){}
+  return d;
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+/* ---------- eigen video's (IndexedDB, alleen op dit toestel) ---------- */
+let VDB = null; const VIDS = {}, REMOTE = new Set(), FR = {};
+const DEFAULT_URLS = {"hallo": "https://vlaamsegebarentaal.be/signbank/dictionary/protected_media/glossvideo/HA/HALLO-A-16601.mp4"};
+function openVDB(){ return new Promise((res, rej) => { const r = indexedDB.open("handig-vgt-videos", 2);
+  r.onupgradeneeded = () => { const d = r.result; if(!d.objectStoreNames.contains("v")) d.createObjectStore("v"); if(!d.objectStoreNames.contains("f")) d.createObjectStore("f"); };
+  r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); }
+function setLive(word, val){
+  if(VIDS[word] && !REMOTE.has(word)) URL.revokeObjectURL(VIDS[word]);
+  REMOTE.delete(word);
+  if(typeof val === "string"){ VIDS[word] = val; REMOTE.add(word); } else VIDS[word] = URL.createObjectURL(val);
+}
+async function loadVids(){
+  try{
+    VDB = await openVDB();
+    await new Promise(res => { const q = VDB.transaction("v").objectStore("v").openCursor();
+      q.onsuccess = () => { const c = q.result; if(c){ setLive(c.key, c.value); c.continue(); } else res(); };
+      q.onerror = () => res(); });
+    await new Promise(res => { const q = VDB.transaction("f").objectStore("f").openCursor();
+      q.onsuccess = () => { const c = q.result; if(c){ FR[c.key] = c.value; c.continue(); } else res(); };
+      q.onerror = () => res(); });
+  }catch(e){ VDB = null; }
+  Object.entries(DEFAULT_URLS).forEach(([w,u]) => { if(!VIDS[w]) setLive(w, u); });
+  if(!L) render();
+}
+function idbPut(store, key, val){ return new Promise((res, rej) => { if(!VDB) return rej(new Error("Opslag niet beschikbaar")); const q = VDB.transaction(store,"readwrite").objectStore(store).put(val, key); q.onsuccess = () => res(); q.onerror = () => rej(q.error); }); }
+function idbDel(store, key){ return new Promise(res => { if(!VDB) return res(); const q = VDB.transaction(store,"readwrite").objectStore(store).delete(key); q.onsuccess = q.onerror = () => res(); }); }
+async function putVid(word, fileOrUrl){
+  const val = typeof fileOrUrl === "string" ? fileOrUrl : new Blob([fileOrUrl], {type: fileOrUrl.type || "video/mp4"});
+  await idbPut("v", word, val);
+  setLive(word, val); delete FR[word]; await idbDel("f", word);
+}
+async function delVid(word){
+  await idbDel("v", word); await idbDel("f", word); delete FR[word];
+  if(VIDS[word]){ if(!REMOTE.has(word)) URL.revokeObjectURL(VIDS[word]); delete VIDS[word]; REMOTE.delete(word); }
+  if(DEFAULT_URLS[word]) setLive(word, DEFAULT_URLS[word]);
+}
+function toast(msg, ms=2600){ const d = document.createElement("div"); d.className = "toast"; d.textContent = msg; document.body.appendChild(d); setTimeout(() => d.remove(), ms); }
+const vidTag = w => `<div class="vwrap"><video class="sv" src="${VIDS[w]}" autoplay loop muted playsinline onerror="vidErr(this,'${w}')"></video><button class="speedbtn" onclick="slow(this)">🐢 0,5×</button></div>`;
+function vidErr(v, w){ const d = document.createElement("div"); d.className = "tips"; d.innerHTML = `⚠️ De video van “${esc(w)}” kon niet laden. Controleer het adres bij <b>Video's</b>, of voeg het bestand toe.`; v.parentNode.replaceWith(d); }
+function slow(b){ const v = b.parentNode.querySelector("video"); const r = v.playbackRate === 1 ? 0.5 : 1; v.playbackRate = r; b.textContent = r === 1 ? "🐢 0,5×" : "▶ 1×"; }
+
+function dkey(off=0){ const d=new Date(); d.setDate(d.getDate()+off); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
+function refresh(){
+  if(S.heartsDay !== dkey()){ S.hearts = 5; S.heartsDay = dkey(); }
+  if(S.lastDay !== dkey() && S.lastDay !== dkey(-1)) S.streak = 0;
+  save();
+}
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $ = id => document.getElementById(id);
+
+const MASCOT = (s=110) => `<svg class="mascot" width="${s}" height="${s}" viewBox="0 0 120 120" aria-hidden="true">
+ <ellipse cx="60" cy="112" rx="30" ry="5" fill="#000" opacity=".08"/>
+ <rect x="30" y="40" width="60" height="66" rx="28" fill="#58cc02"/>
+ <rect x="30" y="18" width="13" height="42" rx="6.5" fill="#58cc02"/>
+ <rect x="45" y="8" width="13" height="46" rx="6.5" fill="#58cc02"/>
+ <rect x="60" y="10" width="13" height="44" rx="6.5" fill="#58cc02"/>
+ <rect x="75" y="20" width="13" height="40" rx="6.5" fill="#58cc02"/>
+ <rect x="84" y="56" width="26" height="13" rx="6.5" fill="#58cc02" transform="rotate(-35 90 62)"/>
+ <ellipse cx="50" cy="70" rx="9" ry="10" fill="#fff"/><ellipse cx="72" cy="70" rx="9" ry="10" fill="#fff"/>
+ <circle cx="52" cy="72" r="4.5" fill="#3c3c3c"/><circle cx="74" cy="72" r="4.5" fill="#3c3c3c"/>
+ <path d="M51 88 q10 9 20 0" stroke="#3c3c3c" stroke-width="4" fill="none" stroke-linecap="round"/>
+ <circle cx="42" cy="84" r="4" fill="#ff86d0" opacity=".6"/><circle cx="80" cy="84" r="4" fill="#ff86d0" opacity=".6"/>
+</svg>`;
+
+
+/* ===================== Camera-oefening (MediaPipe) ===================== */
+const MP_VER = "0.10.14";
+const MP_URL = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}`;
+const HAND_MODEL = "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task";
+const POSE_MODEL = "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task";
+const HAND_LINKS = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const r3 = v => Math.round(v*1000)/1000;
+const clamp01 = v => Math.max(0, Math.min(1, v));
+let SET = {lefty:false, strict:"normaal", camLessons:true};
+try{ Object.assign(SET, JSON.parse(localStorage.getItem("handig-set")||"{}")); }catch(e){}
+function saveSet(){ try{ localStorage.setItem("handig-set", JSON.stringify(SET)); }catch(e){} }
+const camPossible = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) && window.isSecureContext && AI.status !== "error";
+/* ===================== AI (MediaPipe) ===================== */
+const AI = {status:"loading", hand:null, pose:null, err:""};
+let TS = 0; const nextTs = () => (TS = Math.max(TS + 1, Math.floor(performance.now())));
+async function loadAI(){
+  try{
+    let V = window.MOCK_VISION;
+    if(!V){
+      try{ V = await import(MP_URL + "/vision_bundle.mjs"); }
+      catch(e){ V = await import(MP_URL); }
+      if(V.default && !V.HandLandmarker) V = V.default;
+    }
+    const fs = await V.FilesetResolver.forVisionTasks(MP_URL + "/wasm");
+    const make = async (C, path, extra) => {
+      try{ return await C.createFromOptions(fs, Object.assign({baseOptions:{modelAssetPath:path, delegate:"GPU"}, runningMode:"VIDEO"}, extra)); }
+      catch(e){ return await C.createFromOptions(fs, Object.assign({baseOptions:{modelAssetPath:path, delegate:"CPU"}, runningMode:"VIDEO"}, extra)); }
+    };
+    AI.hand = await make(V.HandLandmarker, HAND_MODEL, {numHands:2});
+    try{ AI.pose = await make(V.PoseLandmarker, POSE_MODEL, {numPoses:1}); }catch(e){ AI.pose = null; }
+    AI.status = "ready";
+  }catch(e){
+    console.error(e); AI.status = "error"; AI.err = String(e && e.message || e);
+  }
+  updatePill();
+  if(!L && !P) render();
+}
+let lastPose = null, poseTick = 0;
+function detect(src, everyFramePose){
+  const h = AI.hand.detectForVideo(src, nextTs());
+  if(AI.pose && (everyFramePose || poseTick++ % 3 === 0 || !lastPose)){
+    const p = AI.pose.detectForVideo(src, nextTs());
+    if(p && p.landmarks && p.landmarks[0]) lastPose = p.landmarks[0];
+  }
+  return {hands: (h && h.landmarks) || [], pose: lastPose};
+}
+
+/* ===================== Features & comparison ===================== */
+// One frame = [slot0, slot1]. Slot 0 = hand on the image-left side (= signer's right hand, camera not mirrored).
+function frameFeat(hands, pose, W, H){
+  let cx = W/2, cy = H*0.55, sc = W*0.3;
+  if(pose && pose[11] && pose[12]){
+    const l = pose[11], r = pose[12];
+    const d = Math.hypot((l.x-r.x)*W, (l.y-r.y)*H);
+    if(d > 8){ cx = (l.x+r.x)/2*W; cy = (l.y+r.y)/2*H; sc = d; }
+  }
+  const slots = [null, null];
+  const hs = hands.slice(0,2).map(lm => ({lm, x: lm[0].x*W})).sort((a,b) => a.x - b.x);
+  if(hs.length === 2){ slots[0] = hs[0].lm; slots[1] = hs[1].lm; }
+  else if(hs.length === 1){ slots[hs[0].x < cx ? 0 : 1] = hs[0].lm; }
+  return slots.map(lm => {
+    if(!lm) return null;
+    const pts = lm.map(p => [p.x*W, p.y*H]);
+    const w = pts[0];
+    const size = Math.hypot(pts[9][0]-w[0], pts[9][1]-w[1]) || 1;
+    const s = [];
+    for(let i=1;i<21;i++){ s.push(r3((pts[i][0]-w[0])/size), r3((pts[i][1]-w[1])/size)); }
+    const pc = [(pts[0][0]+pts[9][0])/2, (pts[0][1]+pts[9][1])/2];
+    return {s, p:[r3((pc[0]-cx)/sc), r3((pc[1]-cy)/sc)]};
+  });
+}
+const mirHand = h => h ? {s: h.s.map((v,i) => i%2===0 ? -v : v), p: [-h.p[0], h.p[1]]} : null;
+function prep(frames, mirror){
+  let f = frames.map(fr => fr.map(h => h ? {s:h.s, p:h.p} : null));
+  if(mirror) f = f.map(fr => [mirHand(fr[1]), mirHand(fr[0])]);
+  const active = fr => fr.some(h => h && h.p[1] < 1.4);
+  let a = 0, b = f.length - 1;
+  while(a < f.length && !active(f[a])) a++;
+  while(b > a && !active(f[b])) b--;
+  const t = f.slice(a, b+1);
+  return t.length >= 3 ? t : f.filter(fr => fr.some(Boolean));
+}
+function fdist(A, B){
+  let sh = 0, ps = 0, n = 0, pen = 0;
+  for(let k=0;k<2;k++){
+    const x = A[k], y = B[k];
+    if(!x && !y) continue;
+    if(!x || !y){ pen++; continue; }
+    let d = 0; for(let i=0;i<40;i+=2) d += Math.hypot(x.s[i]-y.s[i], x.s[i+1]-y.s[i+1]);
+    sh += d/20; ps += Math.hypot(x.p[0]-y.p[0], x.p[1]-y.p[1]); n++;
+  }
+  return {sh: n ? sh/n : 0, ps: n ? ps/n : 0, pen, n};
+}
+function compare(refFrames, usrFrames){
+  const A = prep(refFrames, SET.lefty), B = prep(usrFrames, false);
+  if(A.length < 3) return {error:"In de voorbeeldvideo vond ik geen handen. Probeer een andere video, met het bovenlichaam goed in beeld."};
+  if(B.length < 3) return {error:"Ik zag je handen niet goed. Zorg voor goed licht en zorg dat je hoofd, schouders en handen in beeld zijn."};
+  const N = A.length, M = B.length, W = M + 1;
+  const C = new Array(N*M), D = new Float64Array((N+1)*(M+1)).fill(Infinity);
+  D[0] = 0;
+  for(let i=1;i<=N;i++) for(let j=1;j<=M;j++){
+    const c = fdist(A[i-1], B[j-1]); C[(i-1)*M + (j-1)] = c;
+    const cost = c.sh + c.ps + c.pen*0.8;
+    D[i*W+j] = cost + Math.min(D[(i-1)*W+j], D[i*W+j-1], D[(i-1)*W+j-1]);
+  }
+  const path = []; let i = N, j = M;
+  while(i > 0 && j > 0){
+    path.push([i-1, j-1]);
+    const d = D[(i-1)*W+(j-1)], u = D[(i-1)*W+j], l = D[i*W+(j-1)];
+    if(d <= u && d <= l){ i--; j--; } else if(u <= l) i--; else j--;
+  }
+  path.reverse();
+  let sh=0, ps=0, cnt=0, pen=0, dy=0, dyn=0;
+  path.forEach(([a,b]) => {
+    const c = C[a*M+b];
+    pen += c.pen / 2;
+    if(c.n){ sh += c.sh; ps += c.ps; cnt++; }
+    for(let k=0;k<2;k++) if(A[a][k] && B[b][k]){ dy += B[b][k].p[1] - A[a][k].p[1]; dyn++; }
+  });
+  sh = cnt ? sh/cnt : 1; ps = cnt ? ps/cnt : 1; pen = pen / path.length; dy = dyn ? dy/dyn : 0;
+  // movement: compare trajectories after removing each one's average position
+  let md = 0, mdn = 0;
+  for(let k=0;k<2;k++){
+    const pairs = path.filter(([a,b]) => A[a][k] && B[b][k]);
+    if(pairs.length < 2) continue;
+    const ma = [0,0], mb = [0,0];
+    pairs.forEach(([a,b]) => { ma[0]+=A[a][k].p[0]; ma[1]+=A[a][k].p[1]; mb[0]+=B[b][k].p[0]; mb[1]+=B[b][k].p[1]; });
+    ma[0]/=pairs.length; ma[1]/=pairs.length; mb[0]/=pairs.length; mb[1]/=pairs.length;
+    pairs.forEach(([a,b]) => {
+      md += Math.hypot((A[a][k].p[0]-ma[0]) - (B[b][k].p[0]-mb[0]), (A[a][k].p[1]-ma[1]) - (B[b][k].p[1]-mb[1])); mdn++;
+    });
+  }
+  md = mdn ? md/mdn : 0.5;
+  // amount of movement: compare total path length of each hand
+  const plen = (F, k) => { let L = 0; for(let n=1;n<F.length;n++) if(F[n][k] && F[n-1][k]) L += Math.hypot(F[n][k].p[0]-F[n-1][k].p[0], F[n][k].p[1]-F[n-1][k].p[1]); return L; };
+  let ratio = 1;
+  for(let k=0;k<2;k++){ const la = plen(A,k), lb = plen(B,k), mx = Math.max(la, lb); if(mx > 0.35) ratio = Math.min(ratio, Math.min(la, lb) / mx); }
+  const k = {mild:1.4, normaal:1, streng:0.72}[SET.strict] || 1;
+  const sc = (x, good, bad) => Math.round(clamp01((bad*k - x) / (bad*k - good*k)) * 100);
+  const parts = {
+    vorm: sc(sh, 0.25, 0.8),
+    plaats: sc(ps, 0.2, 1.0),
+    beweging: Math.round(sc(md, 0.06, 0.45) * 0.55 + clamp01((ratio - 0.25) / 0.5) * 100 * 0.45),
+    handen: Math.round(clamp01(1 - pen*1.5) * 100)
+  };
+  const avg = parts.vorm*0.35 + parts.plaats*0.3 + parts.beweging*0.2 + parts.handen*0.15;
+  const worst = Math.min(parts.vorm, parts.plaats, parts.beweging, parts.handen);
+  const total = Math.round(avg * (0.55 + 0.45 * worst / 100));
+  return {total, parts, raw:{sh, ps, md, pen, dy, ratio}};
+}
+function tipFor(res){
+  const p = res.parts, tips = [];
+  if(p.handen < 70) tips.push("Let op hoeveel handen je gebruikt. Gebruikt het voorbeeld één of twee handen?");
+  const low = Object.entries({vorm:p.vorm, plaats:p.plaats, beweging:p.beweging}).sort((a,b) => a[1]-b[1])[0];
+  if(low[1] < 75){
+    if(low[0] === "vorm") tips.push("Kijk goed naar de <b>handvorm</b>: welke vingers zijn gestrekt, gebogen of tegen elkaar? Vertraag de video gerust naar 0,5×.");
+    if(low[0] === "plaats"){
+      if(res.raw.dy > 0.2) tips.push("Je hand zit wat <b>lager</b> dan in het voorbeeld. Kijk waar het gebaar begint: aan het gezicht, de borst of ervoor?");
+      else if(res.raw.dy < -0.2) tips.push("Je hand zit wat <b>hoger</b> dan in het voorbeeld.");
+      else tips.push("De <b>plaats</b> verschilt: maak het gebaar op dezelfde plek ten opzichte van je lichaam.");
+    }
+    if(low[0] === "beweging") tips.push("De <b>beweging</b> verschilt: kijk naar de richting, de grootte en hoe vaak de beweging herhaald wordt.");
+  }
+  if(!tips.length) tips.push("Mooi! Vergeet de <b>mimiek</b> niet: die meet deze app niet, dus check die zelf in de video.");
+  return tips.join("<br>");
+}
+
+
+/* ---------- referentievideo analyseren ---------- */
+function onceEvt(el, ev, ms=4000){
+  return new Promise(res => { let done = false; const f = () => { if(done) return; done = true; el.removeEventListener(ev, f); res(); }; el.addEventListener(ev, f); setTimeout(f, ms); });
+}
+async function analyzeWord(w, onProg){
+  if(AI.status !== "ready") throw new Error("ai");
+  const v = document.createElement("video");
+  v.muted = true; v.playsInline = true; v.setAttribute("playsinline",""); v.preload = "auto";
+  if(REMOTE.has(w)) v.crossOrigin = "anonymous";
+  v.style.cssText = "position:fixed;left:-9999px;width:320px";
+  document.body.appendChild(v);
+  try{
+    const ok = await new Promise(res => { v.onloadeddata = () => res(true); v.onerror = () => res(false); setTimeout(() => res(false), 15000); v.src = VIDS[w]; });
+    if(!ok) throw new Error(REMOTE.has(w) ? "cors" : "load");
+    try{ await v.play(); v.pause(); }catch(e){}
+    if(!(isFinite(v.duration) && v.duration > 0)){ v.currentTime = 1e7; await onceEvt(v, "durationchange", 3000); v.currentTime = 0; await onceEvt(v, "seeked", 2000); }
+    const dur = isFinite(v.duration) && v.duration > 0 ? v.duration : 4;
+    const step = Math.max(0.1, dur / 120);
+    const frames = []; lastPose = null;
+    for(let t = 0; t < dur; t += step){
+      v.currentTime = Math.min(t, dur - 0.01); await onceEvt(v, "seeked", 1500);
+      if(v.videoWidth){
+        let r; try{ r = detect(v, true); }catch(e){ throw new Error(REMOTE.has(w) ? "cors" : "detect"); }
+        frames.push(frameFeat(r.hands, r.pose, v.videoWidth, v.videoHeight));
+      }
+      onProg && onProg(t / dur);
+    }
+    const out = {frames, dur};
+    FR[w] = out; idbPut("f", w, out).catch(() => {});
+    return out;
+  } finally { v.remove(); }
+}
+function progress(text, p){
+  if(!$("progbox")) $("layer").innerHTML = `<div class="overlay modal" style="z-index:60"><div class="sheet" style="text-align:center" id="progbox">${MASCOT(70)}<p id="progtxt"></p><div class="prog"><div id="progbar"></div></div></div></div>`;
+  $("progtxt").innerHTML = text; $("progbar").style.width = Math.round(p*100) + "%";
+}
+async function ensureFrames(w){
+  if(FR[w] && FR[w].frames && FR[w].frames.length) return true;
+  progress(`Voorbeeld analyseren… <b>${esc(w)}</b>`, 0);
+  try{ await analyzeWord(w, p => progress(`Voorbeeld analyseren… <b>${esc(w)}</b>`, p)); closeLayer(); return true; }
+  catch(e){
+    closeLayer();
+    const msg = e.message === "cors"
+      ? "De server van het woordenboek laat niet toe dat deze app hun video analyseert (de video afspelen lukt wel). Download de video en kies ze als bestand bij <b>Video's</b>, dan werkt de camera-oefening wel."
+      : "Het voorbeeld kon niet geanalyseerd worden. Probeer een andere video.";
+    modal("Vergelijken lukt niet", msg, "Oké", () => {}, null, false);
+    return false;
+  }
+}
+/* ===================== Camera ===================== */
+const cam = {stream:null, video:null, canvas:null, raf:0, last:0, facing:"user", onFrame:null, seen:0};
+async function startCam(video, canvas){
+  stopCam();
+  try{
+    cam.stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:cam.facing, width:{ideal:640}, height:{ideal:480}}, audio:false});
+  }catch(e){
+    showCamError(e); return false;
+  }
+  video.srcObject = cam.stream; video.muted = true; video.playsInline = true;
+  try{ await video.play(); }catch(e){}
+  cam.video = video; cam.canvas = canvas;
+  const mir = cam.facing === "user";
+  video.classList.toggle("mirror", mir); canvas.classList.toggle("mirror", mir);
+  cam.raf = requestAnimationFrame(camLoop);
+  return true;
+}
+function stopCam(){
+  cancelAnimationFrame(cam.raf);
+  if(cam.stream) cam.stream.getTracks().forEach(t => t.stop());
+  cam.stream = null; cam.video = null; cam.onFrame = null;
+}
+function camLoop(){
+  const v = cam.video;
+  if(!v) return;
+  const now = performance.now();
+  if(v.readyState >= 2 && v.videoWidth && AI.status === "ready" && now - cam.last >= 66){
+    cam.last = now;
+    try{
+      const r = detect(v, false);
+      drawHands(cam.canvas, r.hands, v.videoWidth, v.videoHeight);
+      cam.seen = r.hands.length;
+      const hk = $("handok"); if(hk) hk.textContent = r.hands.length ? `✋ ${r.hands.length} hand${r.hands.length>1?"en":""} gezien` : "Geen handen in beeld";
+      if(cam.onFrame) cam.onFrame(frameFeat(r.hands, r.pose, v.videoWidth, v.videoHeight));
+    }catch(e){ console.warn(e); }
+  }
+  cam.raf = requestAnimationFrame(camLoop);
+}
+function drawHands(c, hands, W, H){
+  if(!c) return;
+  if(c.width !== W) c.width = W; if(c.height !== H) c.height = H;
+  const g = c.getContext("2d"); g.clearRect(0,0,W,H);
+  hands.forEach(lm => {
+    g.strokeStyle = "#58cc02"; g.lineWidth = Math.max(3, W/160); g.lineCap = "round";
+    HAND_LINKS.forEach(([a,b]) => { g.beginPath(); g.moveTo(lm[a].x*W, lm[a].y*H); g.lineTo(lm[b].x*W, lm[b].y*H); g.stroke(); });
+    g.fillStyle = "#fff";
+    lm.forEach(p => { g.beginPath(); g.arc(p.x*W, p.y*H, Math.max(3, W/200), 0, 7); g.fill(); });
+  });
+}
+
+/* ---------- oefenscherm met camera ---------- */
+let P = null;
+async function openPractice(w, onDone){
+  closeLayer();
+  P = {w, frames:[], best:null, onDone, recording:false, speed:1, mirrorRef:false};
+  const d = document.createElement("div"); d.id = "prac"; d.className = "screen"; document.body.appendChild(d);
+  d.innerHTML = `<div class="shead"><button class="x" onclick="closePractice()" aria-label="Sluiten">✕</button><h2>📷 ${esc(w)}</h2>${pillHtml()}</div>
+   <div class="sbody">
+    <div class="vbox" style="flex:.9"><video id="ref" src="${VIDS[w]}" playsinline muted loop autoplay></video>
+      <span class="vlabel">Voorbeeld</span><div class="vtools"><button onclick="pSpeed()" id="spd">1×</button><button onclick="pMirror()">⇋ Spiegel</button></div></div>
+    <div class="vbox" id="pbox" style="flex:1.1"><div class="vstack"><video id="pvid" playsinline muted></video><canvas id="pcan"></canvas></div>
+      <span class="vlabel">Jij</span><span class="handok" id="handok"></span></div>
+   </div><div class="sfoot" id="pctl"></div>`;
+  $("ref").play().catch(() => {});
+  pControls();
+  cam.facing = "user";
+  await startCam($("pvid"), $("pcan"));
+}
+function closePractice(){
+  stopCam(); const d = $("prac"); d && d.remove();
+  const cb = P && P.onDone, best = P && P.best; P = null;
+  if(cb) cb(best); else render();
+}
+function pSpeed(){ P.speed = P.speed === 1 ? 0.5 : 1; $("ref").playbackRate = P.speed; $("spd").textContent = P.speed === 1 ? "1×" : "0,5×"; }
+function pMirror(){ P.mirrorRef = !P.mirrorRef; $("ref").classList.toggle("mirror", P.mirrorRef); toast(P.mirrorRef ? "Voorbeeld gespiegeld, zoals in een spiegel" : "Voorbeeld normaal"); }
+function pControls(){
+  const el = $("pctl"); if(!el || !P) return;
+  if(AI.status === "error"){ el.innerHTML = `<p class="info">De handherkenning kon niet laden, dus vergelijken lukt nu niet. Controleer je internet en herlaad de app.</p><button class="btn ghost" onclick="closePractice()">Sluiten</button>`; return; }
+  el.innerHTML = `<button class="btn" onclick="pGo()" ${AI.status!=="ready"?"disabled":""}>${AI.status==="ready" ? "⏺ Doe het na" : "⏳ Herkenning laden…"}</button>`;
+  if(AI.status !== "ready") setTimeout(() => P && !P.recording && pControls(), 800);
+}
+async function pGo(){
+  const w = P.w;
+  if(!(await ensureFrames(w))) return;
+  if(!P) return;
+  if(!cam.stream && !(await startCam($("pvid"), $("pcan")))) return;
+  const box = $("pbox");
+  $("pctl").innerHTML = `<button class="btn" disabled>Maak je klaar…</button>`;
+  for(const n of [3,2,1]){
+    box.insertAdjacentHTML("beforeend", `<div class="count" id="cnt">${n}</div>`);
+    await sleep(800); const c = $("cnt"); c && c.remove();
+    if(!P) return;
+  }
+  const ref = $("ref"); ref.currentTime = 0; ref.play().catch(() => {});
+  const len = Math.min(9, Math.max(2.5, (FR[w].dur || 3) / P.speed + 1.2));
+  P.frames = []; P.recording = true; P.stopNow = false;
+  cam.onFrame = f => P && P.frames.push(f);
+  box.insertAdjacentHTML("beforeend", `<span class="recdot" id="recdot">● REC</span><div class="rbar" id="rbar" style="width:0"></div>`);
+  $("pctl").innerHTML = `<button class="btn red" onclick="P.stopNow=true">⏹ Klaar</button>`;
+  const t0 = performance.now();
+  while(P && performance.now() - t0 < len*1000 && !P.stopNow){
+    const b = $("rbar"); if(b) b.style.width = ((performance.now()-t0)/(len*10)) + "%";
+    await sleep(100);
+  }
+  cam.onFrame = null;
+  ["recdot","rbar"].forEach(id => { const e = $(id); e && e.remove(); });
+  if(!P) return;
+  P.recording = false;
+  const res = compare(FR[w].frames, P.frames);
+  pResult(res);
+}
+function pResult(res){
+  const el = $("pctl"); if(!el) return;
+  if(res.error){ el.innerHTML = `<div class="tip">⚠️ ${res.error}</div><button class="btn" onclick="pGo()">Opnieuw proberen</button>`; return; }
+  if(!P.best || res.total > P.best.total) P.best = res;
+  const col = v => v >= 75 ? "#58cc02" : v >= 50 ? "#ffc800" : "#ff4b4b";
+  const verdict = res.total >= 75 ? "Goed gedaan! 🎉" : res.total >= 50 ? "Bijna! 💪" : "Nog eens proberen 🔁";
+  const bar = (name, v) => `<div class="bar"><span>${name}</span><div class="tr"><div style="width:${v}%;background:${col(v)}"></div></div><b style="color:${col(v)}">${v}</b></div>`;
+  el.innerHTML = `<div class="result">
+    <div class="score" style="color:${col(res.total)}">${res.total}</div><div class="verdict">${verdict}</div>
+    <div class="bars">${bar("Handvorm",res.parts.vorm)}${bar("Plaats",res.parts.plaats)}${bar("Beweging",res.parts.beweging)}${bar("Handen",res.parts.handen)}</div>
+    <div class="tip">💡 ${tipFor(res)}</div>
+    <div class="row"><button class="btn ghost" onclick="pGo()">Opnieuw</button>${P.onDone ? `<button class="btn" onclick="closePractice()">Doorgaan</button>` : `<button class="btn" onclick="closePractice()">Klaar</button>`}</div></div>`;
+}
+function pillHtml(){
+  if(AI.status === "ready") return `<span class="pill ok" id="pill">✓ Herkenning klaar</span>`;
+  if(AI.status === "error") return `<span class="pill err" id="pill">⚠ Herkenning faalt</span>`;
+  return `<span class="pill wait" id="pill">⏳ Herkenning laden…</span>`;
+}
+function updatePill(){ const p = $("pill"); if(p) p.outerHTML = pillHtml(); }
+function showCamError(e){
+  const name = e && e.name;
+  let msg = "De camera kon niet openen.";
+  if(name === "NotAllowedError") msg = "Je gaf geen toestemming voor de camera. Sta de camera toe voor deze site in je browserinstellingen en probeer opnieuw.";
+  else if(!window.isSecureContext) msg = "De camera werkt alleen via een https-adres.";
+  else if(name === "NotFoundError") msg = "Er werd geen camera gevonden.";
+  modal("Camera", msg, "Oké", () => {}, null, false);
+}
+
+/* ---------- main screens ---------- */
+function render(){
+  refresh();
+  if(L){ renderLesson(); return; }
+  const today = S.xpDay[dkey()]||0;
+  const streakOn = S.lastDay === dkey();
+  let body = "";
+  if(tab==="learn") body = learnView(today);
+  else if(tab==="review") body = reviewView();
+  else if(tab==="videos") body = videosView();
+  else body = profileView(today);
+  $("app").innerHTML = `
+  <div class="top">
+    <div class="brand">${MASCOT(30)} Handig</div>
+    <div class="stats">
+      <span class="s-fire ${streakOn?"":"dim"}">🔥 ${S.streak}</span>
+      <span class="s-xp">⚡ ${S.xp}</span>
+      <span class="s-heart">❤️ ${S.hearts}</span>
+    </div>
+  </div>
+  ${body}
+  <nav class="nav"><div>
+    <button class="${tab==="learn"?"on":""}" onclick="go('learn')"><b>🏠</b>Leren</button>
+    <button class="${tab==="review"?"on":""}" onclick="go('review')"><b>🔁</b>Herhalen</button>
+    <button class="${tab==="videos"?"on":""}" onclick="go('videos')"><b>🎬</b>Video's</button>
+    <button class="${tab==="profile"?"on":""}" onclick="go('profile')"><b>👤</b>Profiel</button>
+  </div></nav>`;
+}
+function go(t){ tab=t; render(); window.scrollTo(0,0); }
+
+function learnView(today){
+  const cur = ALL.findIndex(l => !S.done[l.id]);
+  const offs = [0,45,70,45,0,-45,-70,-45];
+  let k = 0, html = `
+  <div class="goal"><span style="font-size:26px">🎯</span>
+    <div style="flex:1"><div style="display:flex;justify-content:space-between"><span>Dagdoel</span><small>${Math.min(today,GOAL)}/${GOAL} XP</small></div>
+    <div class="bar"><div style="width:${Math.min(100,today/GOAL*100)}%"></div></div></div></div>`;
+  UNITS.forEach((u,ui) => {
+    html += `<section class="unit"><div class="unit-head" style="background:${u.c};--cd:${u.cd}">
+      <small>DEEL ${ui+1}</small><h2>${u.title}</h2><p>${u.desc}</p></div><div class="path">`;
+    u.lessons.forEach(l => {
+      const i = ALL.indexOf(l);
+      const state = S.done[l.id] ? "done" : (i===cur ? "current" : (i<cur||cur===-1 ? "done" : "locked"));
+      const icon = state==="done" ? "👑" : state==="locked" ? "🔒" : (l.type==="quiz" ? "📖" : "✋");
+      html += `<div class="nodewrap" style="transform:translateX(${offs[k++%offs.length]}px);--c:${u.c};--cd:${u.cd}">
+        ${state==="current" ? `<div class="startbub">START</div>` : ""}
+        <button class="node ${state}" onclick="openLesson('${l.id}')" aria-label="${esc(l.title)}">${icon}</button>
+        <div class="nlabel">${l.title}</div></div>`;
+    });
+    html += `</div></section>`;
+  });
+  html += `<div class="pad center muted info" style="padding-bottom:30px">${MASCOT(70)}<br>Meer delen volgen. Ondertussen: blijf herhalen!</div>`;
+  return html;
+}
+
+function reviewView(){
+  const learned = Object.keys(S.words).filter(w => WORDS[w]);
+  let html = `<div class="pad"><h1 class="t">Herhalen</h1>
+   <p class="muted info">Oefen gebaren die je al leerde. Moeilijke woorden komen vaker terug. Elke herhaling geeft je <b>+1 ❤️</b> en <b>5 XP</b>.</p>`;
+  html += learned.length >= 3
+    ? `<button class="btn blue" onclick="startReview()">Start herhaling</button>`
+    : `<div class="card center muted">Leer eerst minstens 3 gebaren in het leerpad.</div>`;
+  html += `<h3 style="margin:26px 0 4px">Woordenlijst</h3><p class="muted info" style="margin:0">Groen = gaat goed, rood = nog oefenen. Tik om het gebaar op te zoeken.</p>`;
+  UNITS.filter(u => u.lessons.some(l => l.w)).forEach(u => {
+    html += `<div class="card"><b>${u.title}</b><div class="chips">`;
+    u.lessons.forEach(l => (l.w||[]).forEach(([w,e]) => {
+      const st = S.words[w]; const cls = !st ? "new" : (st.bad > st.ok ? "weak" : "ok");
+      html += `<a class="chip ${cls}" href="${DICT}" target="_blank" rel="noopener" onclick="copyWord('${w}')">${e} ${w}</a>`;
+    }));
+    html += `</div></div>`;
+  });
+  return html + `</div>`;
+}
+
+function videosView(){
+  const total = Object.keys(WORDS).length, have = Object.keys(WORDS).filter(w => VIDS[w]).length;
+  let html = `<div class="pad"><h1 class="t">Video's</h1>
+   <p class="muted info" style="margin-top:0">Laad gebarenvideo's in de app. Dan zie je het gebaar meteen in de les en krijg je oefeningen als “Wat betekent dit gebaar?”. De video's blijven alleen op dit toestel. <b>${have}/${total}</b> woorden hebben een video.</p>
+   <div class="card info"><b style="color:var(--ink)">Snelst: plak het videoadres</b><br>
+    Zoek het woord op in het <a href="${DICT}" target="_blank" rel="noopener">VGT-woordenboek</a>. Op een computer: klik met de rechtermuisknop op de video en kies <i>Videoadres kopiëren</i>. Op Android: houd je vinger op de video en kies <i>Link kopiëren</i>. Tik hieronder naast het woord op <b>🔗</b> en plak het adres.</div>
+   <div class="card info"><b style="color:var(--ink)">Of: videobestanden</b><br>
+    De video's van het VGT-woordenboek kun je downloaden als <a href="https://taalmaterialen.ivdnt.org/?p=1796" target="_blank" rel="noopener">videodataset bij het Instituut voor de Nederlandse Taal</a> (zip van ±150 MB). Pak die uit en kies hieronder de video's die je nodig hebt. Een video die je zelf opslaat of filmt, kan ook.</div>
+   <div style="display:grid;gap:12px">
+    <label class="btn">📁 Importeer video's<input type="file" accept="video/*" multiple onchange="importVids(this.files)"></label>
+    <label class="btn ghost">🗂 Kies een hele map (computer)<input type="file" webkitdirectory multiple onchange="importVids(this.files)"></label>
+   </div>
+   <p class="info">Bij importeren koppel ik de bestandsnaam aan een woord: “hallo.mp4” of “HALLO-A-123.mp4” wordt <i>hallo</i>. Lukt dat niet, kies dan per woord een video hieronder.</p>`;
+  UNITS.filter(u => u.lessons.some(l => l.w)).forEach(u => {
+    html += `<div class="card"><b>${u.title}</b>`;
+    u.lessons.forEach(l => (l.w||[]).forEach(([w,e]) => {
+      html += `<div class="vrow"><span>${e} ${w}${VIDS[w] ? ` <span class="ok">✓</span>` : ""}</span>${VIDS[w] ? `<button class="mini" onclick="previewVid('${w}')">▶</button><button class="mini" onclick="openPractice('${w}')">📷</button>` : ""}
+        <button class="mini" onclick="askUrl('${w}')">🔗</button><label class="mini">📁<input type="file" accept="video/*" onchange="setVid('${w}', this.files[0])"></label></div>`;
+    }));
+    html += `</div>`;
+  });
+  return html + `</div>`;
+}
+async function setVid(w, f){
+  if(!f) return;
+  try{ await putVid(w, f); render(); }
+  catch(e){ modal("Opslaan mislukt","De video kon niet bewaard worden. Misschien is de opslag vol of staat privénavigatie aan.","Oké",() => {},null,false); }
+}
+async function importVids(files){
+  files = Array.from(files || []).filter(f => /^video\//.test(f.type) || /\.(mp4|webm|mov|m4v|ogv)$/i.test(f.name));
+  if(!files.length){ modal("Geen video's","Ik vond geen videobestanden in je selectie.","Oké",() => {},null,false); return; }
+  const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\.[^.]+$/,"").replace(/[^a-z]+/g," ").trim();
+  const words = Object.keys(WORDS).map(w => [w, norm(w)]);
+  const got = new Set(), plan = [];
+  files.forEach(f => { const n = norm(f.name); const hit = words.find(([w,nw]) => n === nw && !got.has(w)); if(hit){ got.add(hit[0]); plan.push([hit[0], f]); } });
+  files.forEach(f => {
+    if(plan.some(p => p[1] === f)) return;
+    const n = " " + norm(f.name) + " ";
+    const hits = words.filter(([w,nw]) => !got.has(w) && n.includes(" " + nw + " ")).sort((a,b) => b[1].length - a[1].length);
+    if(hits.length){ got.add(hits[0][0]); plan.push([hits[0][0], f]); }
+  });
+  let ok = 0;
+  for(const [w,f] of plan){ try{ await putVid(w, f); ok++; }catch(e){} }
+  render();
+  const unmatched = files.length - plan.length;
+  modal(ok ? "Video's geladen 🎬" : "Niets gekoppeld",
+    `${ok} video${ok===1?"":"'s"} gekoppeld aan een woord.` + (unmatched ? `<br>${unmatched===1?"1 bestand zonder overeenkomend woord werd":unmatched+" bestanden zonder overeenkomend woord werden"} overgeslagen. Die kun je per woord zelf kiezen.` : ""),
+    "Oké", () => {}, null, false);
+}
+function askUrl(w){
+  $("layer").innerHTML = `<div class="overlay" onclick="if(event.target===this)closeLayer()"><div class="sheet">
+    <h3>Videoadres voor “${esc(w)}”</h3>
+    <p class="info" style="margin-top:0">Plak het adres van de video uit het woordenboek. Het eindigt meestal op <b>.mp4</b>.</p>
+    <input class="txt" id="urlin" type="url" placeholder="https://vlaamsegebarentaal.be/…/….mp4" value="${REMOTE.has(w) ? esc(VIDS[w]) : ""}" autocomplete="off">
+    <div class="row" style="margin-top:14px"><button class="btn ghost" onclick="pasteUrl()">📋 Plakken</button><button class="btn" onclick="saveUrl('${w}')">Opslaan</button></div>
+    <a class="btn ghost" style="margin-top:12px" href="${DICT}" target="_blank" rel="noopener" onclick="copyWord('${w}')">🔍 Zoek “${esc(w)}” in het woordenboek ↗</a>
+  </div></div>`;
+}
+async function pasteUrl(){ try{ const t = await navigator.clipboard.readText(); if(t) $("urlin").value = t.trim(); }catch(e){ toast("Plakken lukt niet automatisch: houd je vinger in het veld en kies Plakken"); } }
+async function saveUrl(w){
+  const u = ($("urlin").value || "").trim();
+  if(!/^https?:\/\/\S+$/i.test(u)){ toast("Dat lijkt geen geldig adres"); return; }
+  try{ await putVid(w, u); closeLayer(); render(); toast(`Video voor “${w}” opgeslagen`); }
+  catch(e){ toast("Opslaan mislukt"); }
+}
+function previewVid(w){
+  $("layer").innerHTML = `<div class="overlay" onclick="if(event.target===this)closeLayer()"><div class="sheet">
+    <div class="wordhead">${w}</div>${vidTag(w)}
+    <div class="row" style="margin-top:16px"><button class="btn ghost" onclick="delVid('${w}').then(()=>{closeLayer();render()})">Verwijderen</button><button class="btn blue" onclick="openPractice('${w}')">📷 Oefen</button></div>
+    <button class="btn" style="margin-top:12px" onclick="closeLayer()">Sluiten</button>
+  </div></div>`;
+}
+
+function profileView(today){
+  const lessons = Object.keys(S.done).length;
+  const words = Object.keys(S.words).length;
+  return `<div class="pad"><div class="center">${MASCOT(100)}<h1 class="t">Jouw voortgang</h1></div>
+   <div class="grid">
+    <div class="stat"><b>🔥 ${S.streak}</b><small>dagen reeks</small></div>
+    <div class="stat"><b>⚡ ${S.xp}</b><small>XP totaal</small></div>
+    <div class="stat"><b>👑 ${lessons}/${ALL.length}</b><small>lessen voltooid</small></div>
+    <div class="stat"><b>✋ ${words}</b><small>gebaren geleerd</small></div>
+   </div>
+   <div class="card info">
+    <b style="color:var(--ink)">Over deze app</b><br>
+    Voeg gebarenvideo's toe via het tabblad <b>Video's</b>: dan zie je ze in de lessen en kun je ze voor de camera nadoen. Zonder video verwijst elke les naar het officiële
+    <a href="${DICT}" target="_blank" rel="noopener">Woordenboek Vlaamse Gebarentaal</a> van het VGTC.
+    Bij een tik wordt het woord ook gekopieerd, zodat je het meteen kunt plakken in het zoekveld.<br><br>
+    Let bij elk gebaar op <b>handvorm, plaats, beweging, oriëntatie</b> én <b>mimiek</b>.
+    Een app vervangt geen les: combineer dit met een VGT-cursus en gesprekken met Dove gebaarders.
+   </div>
+   <div class="card">
+    <b>Camera-oefening</b>
+    <div class="setrow"><div>In lessen<br><small class="muted">Gebaren met video doe je voor de camera</small></div>
+      <button class="switch ${SET.camLessons?"on":""}" onclick="SET.camLessons=!SET.camLessons;saveSet();render()" aria-label="Camera in lessen"></button></div>
+    <div class="setrow"><div>Ik ben linkshandig<br><small class="muted">Spiegelt het voorbeeld bij het vergelijken</small></div>
+      <button class="switch ${SET.lefty?"on":""}" onclick="SET.lefty=!SET.lefty;saveSet();render()" aria-label="Linkshandig"></button></div>
+    <div class="setrow"><div>Strengheid<br><small class="muted">Hoe streng de score is</small></div>
+      <select onchange="SET.strict=this.value;saveSet()">${["mild","normaal","streng"].map(o => `<option ${SET.strict===o?"selected":""}>${o}</option>`).join("")}</select></div>
+    <p class="info" style="margin:6px 0 0">De score is een <b>indicatie</b>: de app vergelijkt handvorm, plaats en beweging met de video, maar niet je mimiek. Status: ${pillHtml()}</p>
+   </div>
+   <button class="btn ghost" onclick="askReset()">Voortgang wissen</button></div>`;
+}
+
+/* ---------- sheets & modals ---------- */
+function closeLayer(){ $("layer").innerHTML = ""; }
+function openLesson(id){
+  const l = ALL.find(x => x.id===id), i = ALL.indexOf(l);
+  const cur = ALL.findIndex(x => !S.done[x.id]);
+  const locked = !S.done[id] && i > cur && cur !== -1;
+  const n = l.type==="quiz" ? `${l.q.length} vragen` : `${l.w.length} nieuwe gebaren`;
+  $("layer").innerHTML = `<div class="overlay" onclick="if(event.target===this)closeLayer()"><div class="sheet">
+    <h3>${l.title}</h3>
+    <p>${locked ? "Voltooi eerst de vorige lessen om deze te openen." : `${l.unit.title} · ${n}${S.done[id]?" · al voltooid":""}`}</p>
+    ${locked ? `<button class="btn" disabled>🔒 Vergrendeld</button>`
+      : `<button class="btn" style="background:${l.unit.c};box-shadow:0 4px 0 ${l.unit.cd}" onclick="startLesson('${id}')">${S.done[id]?"Opnieuw oefenen":"Start"} +10 XP</button>`}
+  </div></div>`;
+}
+function modal(title, text, okLabel, okFn, cancelLabel="Annuleren", danger=true){
+  window._ok = () => { closeLayer(); okFn(); };
+  $("layer").innerHTML = `<div class="overlay modal"><div class="sheet center">
+    <h3>${title}</h3><p>${text}</p>
+    <div class="row">${cancelLabel ? `<button class="btn ghost" onclick="closeLayer()">${cancelLabel}</button>` : ""}
+    <button class="btn ${danger?"red":""}" onclick="_ok()">${okLabel}</button></div></div></div>`;
+}
+function askReset(){ modal("Alles wissen?","Je XP, reeks en lessen worden gewist.","Wissen",() => { S = {xp:0,streak:0,lastDay:null,hearts:5,heartsDay:null,done:{},words:{},xpDay:{}}; save(); render(); }); }
+function copyWord(w){ try{ navigator.clipboard.writeText(w).catch(()=>{}); }catch(e){} }
+
+/* ---------- lesson engine ---------- */
+function startLesson(id){
+  closeLayer();
+  const l = ALL.find(x => x.id===id);
+  if(l.type==="quiz" && S.hearts<=0){ noHearts(); return; }
+  let steps;
+  if(l.type==="quiz"){
+    steps = l.q.map(q => q.t==="mc" ? Object.assign({}, q, {o: shuffle(q.o)}) : Object.assign({}, q));
+  } else {
+    const intros = S.done[id] ? [] : l.w.map(([w,e]) => ({t:"intro", w, e}));
+    const sees = l.w.filter(([w]) => VIDS[w]).map(([w,e]) => seeStep(w, e, l));
+    const useCam = w => VIDS[w] && SET.camLessons && camPossible();
+    steps = intros.concat(shuffle(sees), shuffle(l.w.map(([w,e]) => ({t: useCam(w) ? "cam" : "recall", w, e}))));
+  }
+  L = {lesson:l, q:steps, i:0, good:0, total:steps.length, mistakes:0, graded:0, t0:Date.now(), review:false};
+  resetStep(); render();
+}
+function seeStep(w, e, l){
+  const same = (l && l.w ? l.w.map(x => x[0]) : []).filter(x => x !== w);
+  const other = Object.keys(WORDS).filter(x => x !== w && !same.includes(x));
+  const opts = shuffle(same).concat(shuffle(other)).slice(0, 3);
+  return {t:"see", w, e, o: shuffle([w].concat(opts))};
+}
+function startReview(){
+  const ws = shuffle(Object.keys(S.words).filter(w => WORDS[w]))
+    .sort((a,b) => (S.words[b].bad - S.words[b].ok*.6) - (S.words[a].bad - S.words[a].ok*.6))
+    .slice(0,8);
+  const steps = shuffle(ws).map(w => VIDS[w] && Math.random() < .5 ? seeStep(w, WORDS[w].e, null) : ({t:"recall", w, e:WORDS[w].e}));
+  L = {lesson:{id:"review",title:"Herhaling",type:"vocab",unit:{c:"#1cb0f6",cd:"#1899d6"}}, q:steps, i:0, good:0, total:steps.length, mistakes:0, graded:0, t0:Date.now(), review:true};
+  resetStep(); render();
+}
+function noHearts(){
+  modal("Geen hartjes meer 💔","Herhaal gebaren om hartjes terug te verdienen, of kom morgen terug voor 5 nieuwe.","Herhalen",() => { tab="review"; render(); },"Later",false);
+}
+function resetStep(){ L.sel=null; L.checked=false; L.res=null; L.m=null; L.show=false; L.camRes=null; }
+function askQuit(){ modal("Wil je stoppen?","Je voortgang in deze les gaat verloren.","Stoppen",() => { L=null; render(); },"Verder leren"); }
+
+function renderLesson(){
+  if(L.finished){ renderFinish(); return; }
+  if(L.dead){ $("app").innerHTML = `<div class="lesson"><div class="finish">${MASCOT(110)}<h2 style="color:var(--red)">Geen hartjes meer</h2>
+    <p class="muted">Herhaal gebaren om hartjes terug te verdienen, of kom morgen terug.</p></div>
+    <div class="lfoot"><div><button class="btn blue" onclick="L=null;tab='review';render()">Naar herhalen</button></div></div></div>`; return; }
+  const s = L.q[L.i];
+  const pct = Math.round(L.good / L.total * 100);
+  let body = "", foot = "";
+  if(s.t==="intro" && VIDS[s.w]){
+    body = `<span class="tag">✨ Nieuw gebaar</span><h2>Leer dit gebaar</h2>
+     <div class="wordhead">${s.e} ${s.w}</div>${vidTag(s.w)}
+     <div class="tips">💡 Doe het gebaar 3× na. Let op <b>handvorm</b>, <b>plaats</b>, <b>beweging</b>, <b>oriëntatie</b> en <b>mimiek</b>. Gaat het te snel? Zet de video op 0,5×.</div>`;
+    foot = `<button class="btn" onclick="L.good++;advance()">Ik heb het nagedaan</button>`;
+  }
+  else if(s.t==="intro"){
+    body = `<span class="tag">✨ Nieuw gebaar</span><h2>Leer dit gebaar</h2>
+     <div class="wordcard"><div class="emo">${s.e}</div><div class="w">${s.w}</div>
+      <div class="muted">Bekijk de video en doe het gebaar 3× na</div></div>
+     <a class="dictbtn" href="${DICT}" target="_blank" rel="noopener" onclick="copyWord('${s.w}');L.opened=1;">▶ Bekijk “${s.w}” in het woordenboek ↗</a>
+     <div class="tips">💡 Het woord wordt gekopieerd, plak het in het zoekveld. Let op <b>handvorm</b>, <b>plaats</b>, <b>beweging</b>, <b>oriëntatie</b> en <b>mimiek</b>. Zijn er regionale varianten? Kies er één en blijf die gebruiken.</div>`;
+    foot = `<button class="btn" onclick="L.good++;advance()">Ik heb het nagedaan</button>`;
+  }
+  else if(s.t==="recall"){
+    body = `<span class="tag">✋ Gebaar het</span><h2>Maak het gebaar voor dit woord</h2>
+     <div class="wordcard"><div class="emo">${s.e}</div><div class="w">${s.w}</div></div>
+     ${VIDS[s.w] ? ((L.show || L.checked) ? `<div style="margin-top:14px">${vidTag(s.w)}</div>` : `<button class="dictbtn" style="width:100%;background:#fff" onclick="L.show=true;render()">👀 Toon het gebaar</button>`)
+       : (L.checked ? "" : `<a class="dictbtn" href="${DICT}" target="_blank" rel="noopener" onclick="copyWord('${s.w}')">🔍 Controleer in het woordenboek ↗</a>`)}
+     <div class="tips">Maak eerst het gebaar uit je hoofd. Controleer daarna en wees eerlijk tegen jezelf. Zo komen moeilijke woorden vaker terug.</div>`;
+    foot = L.checked ? feedback() :
+      `<div class="row"><button class="btn ghost" onclick="recall(false)">Nog moeilijk</button><button class="btn" onclick="recall(true)">Gelukt!</button></div>`;
+  }
+  else if(s.t==="cam"){
+    body = `<span class="tag">📷 Doe het voor de camera</span><h2>Maak dit gebaar voor de camera</h2>
+     <div class="wordcard"><div class="emo">${s.e}</div><div class="w">${s.w}</div></div>
+     <div class="tips">Zet je gsm rechtop zodat je hoofd, schouders en handen in beeld zijn. De app vergelijkt je handvorm, plaats en beweging met de video. Mimiek controleer je zelf.</div>`;
+    foot = L.checked ? feedback() :
+      `<div class="row"><button class="btn ghost" onclick="camSkip()">Nu niet</button><button class="btn" onclick="camStart()">📷 Start</button></div>`;
+  }
+  else if(s.t==="see"){
+    body = `<span class="tag">👀 Wat betekent dit gebaar?</span><div style="margin:10px 0 16px">${vidTag(s.w)}</div><div class="opts">` +
+      s.o.map((o,j) => {
+        let c = "";
+        if(L.checked){ if(o===s.w) c="right"; else if(o===L.sel) c="wrong"; }
+        else if(o===L.sel) c="sel";
+        return `<button class="opt ${c}" ${L.checked?"disabled":""} onclick="pick(${j})">${esc(o)}</button>`;
+      }).join("") + `</div>`;
+    L._opts = s.o; L._ans = s.w;
+    foot = L.checked ? feedback() : `<button class="btn" ${L.sel===null?"disabled":""} onclick="check()">Controleer</button>`;
+  }
+  else if(s.t==="mc" || s.t==="tf"){
+    const opts = s.t==="tf" ? ["Waar","Niet waar"] : s.o;
+    const ans = s.t==="tf" ? (s.a ? "Waar" : "Niet waar") : s.a;
+    body = `<span class="tag">${s.t==="tf"?"⚖️ Waar of niet waar?":"📖 Kies het juiste antwoord"}</span><h2>${s.p}</h2><div class="opts">` +
+      opts.map((o,j) => {
+        let c = "";
+        if(L.checked){ if(o===ans) c="right"; else if(o===L.sel) c="wrong"; }
+        else if(o===L.sel) c="sel";
+        return `<button class="opt ${c}" ${L.checked?"disabled":""} onclick="pick(${j})">${esc(o)}</button>`;
+      }).join("") + `</div>`;
+    L._opts = opts; L._ans = ans;
+    foot = L.checked ? feedback() : `<button class="btn" ${L.sel===null?"disabled":""} onclick="check()">Controleer</button>`;
+  }
+  else if(s.t==="match"){
+    if(!L.m) L.m = {l:shuffle(s.pairs.map((_,j)=>j)), r:shuffle(s.pairs.map((_,j)=>j)), sl:null, sr:null, done:[], err:false, flash:null};
+    const m = L.m;
+    const btn = (side,j) => {
+      const txt = s.pairs[j][side==="l"?0:1];
+      const gone = m.done.includes(j), sel = (side==="l"?m.sl:m.sr)===j;
+      const fl = m.flash && m.flash[side]===j;
+      return `<button class="opt ${gone?"gone":""} ${sel?"sel":""} ${fl?"flash":""}" ${gone||L.checked?"disabled":""} onclick="mtap('${side}',${j})">${esc(txt)}</button>`;
+    };
+    body = `<span class="tag">🧩 Koppelen</span><h2>${s.p}</h2><div class="mgrid">
+      <div class="mcol">${m.l.map(j=>btn("l",j)).join("")}</div><div class="mcol">${m.r.map(j=>btn("r",j)).join("")}</div></div>`;
+    foot = L.checked ? feedback() : `<button class="btn" disabled>Tik op twee kaartjes</button>`;
+    m.flash = null;
+  }
+  const fcls = L.checked ? L.res : "";
+  $("app").innerHTML = `<div class="lesson">
+    <div class="lhead"><button class="x" onclick="askQuit()" aria-label="Stoppen">✕</button>
+     <div class="pbar"><div style="width:${pct}%"></div></div>
+     ${L.lesson.type==="quiz" ? `<div class="lh">❤️ ${S.hearts}</div>` : ""}</div>
+    <div class="lbody">${body}</div>
+    <div class="lfoot ${fcls}"><div>${foot}</div></div></div>`;
+}
+
+function feedback(){
+  const s = L.q[L.i];
+  let title, txt = s.e || "";
+  if(L.res==="ok") title = ["Goed zo!","Prima!","Super!","Helemaal juist!"][Math.floor(Math.random()*4)];
+  else if(L.res==="bad"){ title = "Niet helemaal"; txt = `Juist antwoord: <b>${esc(L._ans)}</b>${s.e?"<br>"+s.e:""}`; }
+  else { title = "Geen probleem"; txt = `“${s.w}” komt straks nog eens terug. Bekijk het gebaar gerust opnieuw.`; }
+  if(s.t==="cam" && L.camRes){ title = (L.camRes.total >= 75 ? "Goed gedaan! Score " : L.res==="ok" ? "Geslaagd! Score " : "Bijna! Score ") + L.camRes.total; txt = tipFor(L.camRes) + (L.res==="ok" ? "" : "<br>Dit gebaar komt straks nog eens terug."); }
+  const cls = L.res==="bad" ? "red" : L.res==="meh" ? "gold" : "";
+  return `<div class="fb"><b>${L.res==="ok"?"✅":L.res==="bad"?"❌":"💪"} ${title}</b>${txt?`<p>${txt}</p>`:""}</div>
+    <button class="btn ${cls}" onclick="advance()">Doorgaan</button>`;
+}
+function camStart(){
+  const s = L.q[L.i];
+  openPractice(s.w, res => {
+    if(!L){ render(); return; }
+    if(res && !res.error){
+      const st = S.words[s.w] || (S.words[s.w] = {ok:0,bad:0});
+      L.checked = true; L.graded++; L.camRes = res;
+      if(res.total >= 60){ st.ok++; L.res = "ok"; L.good++; }
+      else { st.bad++; L.res = "meh"; L.mistakes++; if(!s.retry) L.q.push(Object.assign({}, s, {retry:true})); else L.good++; }
+      save();
+    }
+    render();
+  });
+}
+function camSkip(){ L.good++; advance(); }
+function pick(j){ L.sel = L._opts[j]; render(); }
+function check(){
+  const s = L.q[L.i];
+  L.checked = true; L.graded++;
+  const ok = L.sel === L._ans;
+  if(s.t==="see"){ const st = S.words[s.w] || (S.words[s.w] = {ok:0,bad:0}); ok ? st.ok++ : st.bad++; save(); }
+  if(ok){ L.res="ok"; L.good++; }
+  else { L.res="bad"; L.mistakes++; if(L.lesson.type==="quiz"){ S.hearts=Math.max(0,S.hearts-1); } save(); L.q.push(Object.assign({}, s, s.o?{o:shuffle(s.o)}:{})); }
+  render();
+}
+function recall(ok){
+  const s = L.q[L.i];
+  const st = S.words[s.w] || (S.words[s.w] = {ok:0,bad:0});
+  L.checked = true; L.graded++;
+  if(ok){ st.ok++; L.res="ok"; L.good++; }
+  else { st.bad++; L.res="meh"; L.mistakes++; if(!s.retry) L.q.push(Object.assign({}, s, {retry:true})); else L.good++; }
+  save(); render();
+}
+function mtap(side,j){
+  const m = L.m;
+  if(side==="l") m.sl = j; else m.sr = j;
+  if(m.sl!==null && m.sr!==null){
+    if(m.sl===m.sr){ m.done.push(m.sl); }
+    else { m.flash = {l:m.sl, r:m.sr}; if(!m.err){ m.err=true; L.mistakes++; S.hearts=Math.max(0,S.hearts-1); save(); } }
+    m.sl = m.sr = null;
+    if(m.done.length === L.q[L.i].pairs.length){ L.checked=true; L.graded++; L.res = "ok"; L.good++; }
+  }
+  render();
+}
+function advance(){
+  if(L.lesson.type==="quiz" && S.hearts<=0){ L.dead = true; render(); return; }
+  L.i++; resetStep();
+  if(L.i >= L.q.length) finish();
+  render();
+}
+function finish(){
+  const perfect = L.mistakes===0;
+  const xp = L.review ? 5 : 10 + (perfect ? 5 : 0);
+  S.xp += xp; S.xpDay[dkey()] = (S.xpDay[dkey()]||0) + xp;
+  if(S.lastDay !== dkey()){ S.streak = (S.lastDay === dkey(-1) ? S.streak : 0) + 1; S.lastDay = dkey(); }
+  if(L.review) S.hearts = Math.min(5, S.hearts+1);
+  else { S.done[L.lesson.id] = (S.done[L.lesson.id]||0) + 1; (L.lesson.w||[]).forEach(([w]) => S.words[w] = S.words[w] || {ok:0,bad:0}); }
+  save();
+  const secs = Math.round((Date.now()-L.t0)/1000);
+  L.finished = {xp, acc: L.graded ? Math.round((L.graded-L.mistakes)/L.graded*100) : 100, time: Math.floor(secs/60)+":"+String(secs%60).padStart(2,"0"), perfect};
+}
+function renderFinish(){
+  const f = L.finished;
+  const cols = ["#58cc02","#1cb0f6","#ffc800","#ff86d0","#ce82ff","#ff9600"];
+  let conf = ""; for(let k=0;k<50;k++) conf += `<i style="left:${Math.random()*100}%;background:${cols[k%6]};animation-duration:${1.8+Math.random()*1.8}s;animation-delay:${Math.random()*.6}s"></i>`;
+  $("app").innerHTML = `<div class="lesson"><div class="confetti">${conf}</div>
+   <div class="finish">${MASCOT(130)}
+    <h2>${L.review ? "Herhaling klaar!" : f.perfect ? "Perfecte les!" : "Les voltooid!"}</h2>
+    <div class="fstats">
+     <div class="fstat" style="--fc:#ffc800"><small>XP</small><b>⚡ ${f.xp}</b></div>
+     <div class="fstat" style="--fc:#58cc02"><small>${L.lesson.type==="quiz"?"Juist":"Gelukt"}</small><b>🎯 ${f.acc}%</b></div>
+     <div class="fstat" style="--fc:#1cb0f6"><small>Tijd</small><b>⏱ ${f.time}</b></div>
+    </div>
+    ${L.review ? `<p class="muted">+1 ❤️ verdiend</p>` : ""}
+   </div>
+   <div class="lfoot"><div><button class="btn" onclick="L=null;render()">Doorgaan</button></div></div></div>`;
+}
+
+render();
+loadVids();
+loadAI();
+</script>
+</body>
+</html>
